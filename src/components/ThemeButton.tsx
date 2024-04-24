@@ -2,7 +2,7 @@ import { useState } from "preact/hooks";
 import darkIcon from "../assets/dark.svg";
 import lightIcon from "../assets/light.svg";
 
-const DarkIcon = <img src={darkIcon.src} style={{ filter: "invert(1)" }} />;
+const DarkIcon = <img src={darkIcon.src} />;
 const LightIcon = <img src={lightIcon.src} />;
 
 export default function ThemeButton() {
