@@ -107,3 +107,8 @@ body {
 :root::-webkit-scrollbar {
   display: none;
 }
+
+body.dark {
+  background-color: #151515;
+  color: #ffffff;
+}
