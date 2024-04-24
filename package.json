@@ -18,5 +18,8 @@
     "astro": "^4.5.18",
     "preact": "^10.20.2",
     "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "vite-plugin-svgr": "^4.2.0"
   }
 }
