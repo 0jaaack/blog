@@ -85,7 +85,12 @@ body {
     BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-  overflow: hidden;
+}
+
+main {
+  max-width: 624px;
+  margin: 0 auto;
+  padding: 60px 24px 12px;
 }
 
 :root {
@@ -100,4 +105,24 @@ body {
 body.dark {
   background-color: #151515;
   color: #ffffff;
+}
+
+.icon-button {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.icon-button:hover {
+  background-color: #f1f3f5;
+}
+
+body.dark .icon-button:hover {
+  background-color: #212529;
+}
+
+body.dark .icon-button img {
+  filter: invert(1);
 }

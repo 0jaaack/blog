@@ -1,0 +1,37 @@
+---
+import github from "../assets/github.svg?raw";
+import email from "../assets/email.svg?raw";
+import ThemeButton from "./ThemeButton.tsx";
+---
+<header>
+	<span>Jaaack</span>
+	<nav>
+		<ThemeButton client:only />
+		<a href="https://github.com/0jaaack" class="icon-button" target="_blank" rel="noopener noreferrer">
+			<Fragment set:html={github} />
+		</a>
+		<a href="mailto:ruud091@gmail.com" class="icon-button">
+			<Fragment set:html={email} />
+		</a>
+	</nav>
+</header>
+<style>
+	header {
+		display: flex;
+		align-items: center;
+		margin-bottom: 24px;
+	}
+
+	span {
+		font-size: 24px;
+		font-weight: 700;
+		color: var(--color-primary);
+		user-select: none;
+	}
+
+	nav {
+		display: flex;
+		gap: 12px;
+		margin-left: auto;
+	}
+</style>
