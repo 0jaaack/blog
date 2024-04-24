@@ -45,6 +45,7 @@
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.1s linear;
 }
 
 img,
