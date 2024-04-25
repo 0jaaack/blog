@@ -1,0 +1,50 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import BlogHeader from '../components/BlogHeader.astro';
+import TimeStamp from '../components/TimeStamp.astro';
+import { getCollection } from 'astro:content';
+
+const essays = await getCollection('essays')
+	.then((essays) => essays.sort((a, b) => new Date(b.data.publishedDate).getTime() - new Date(a.data.publishedDate).getTime()));
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title="jaaack.dev" description="공재혁 블로그" />
+	</head>
+	<body>
+		<main>
+			<BlogHeader />
+			{essays.map((essay) => (
+				<section>
+					<a href={`/${essay.slug}`}>
+						<span>{essay.data.title}</span>
+						<TimeStamp date={essay.data.publishedDate}/>
+					</a>
+				</section>
+			))}
+		</main>
+	</body>
+</html>
+<style is:global>
+	section a {
+		display: inline-block;
+		height: 48px;
+		padding-block: 12px;
+		padding-inline: 4px;
+	}
+
+	section span {
+		color: var(--color-primary);
+		font-size: 16px;
+		vertical-align: middle;
+	}
+
+	section time {
+		color: var(--color-secondary);
+		font-size: 12px;
+		margin-inline-start: 4px;
+		vertical-align: sub;
+	}
+</style>
