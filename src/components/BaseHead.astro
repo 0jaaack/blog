@@ -50,6 +50,14 @@ const socialUrl = Astro.site?.href + 'assets/social.png';
 <!-- Site Map -->
 <link rel="sitemap" href="/sitemap-index.xml" />
 
+<!-- RSS -->
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title="jaaack.dev"
+  href={`${Astro.site}rss.xml`}
+/>
+
 <!-- Transitions -->
 <ViewTransitions />
 

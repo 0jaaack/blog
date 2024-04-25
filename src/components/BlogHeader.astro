@@ -1,6 +1,7 @@
 ---
 import github from "../assets/github.svg?raw";
 import email from "../assets/email.svg?raw";
+import rss from "../assets/rss.svg?raw";
 import ThemeButton from "./ThemeButton.tsx";
 ---
 <header>
@@ -9,6 +10,9 @@ import ThemeButton from "./ThemeButton.tsx";
 		<ThemeButton client:only />
 		<a href="https://github.com/0jaaack" class="icon-button" target="_blank" rel="noopener noreferrer">
 			<Fragment set:html={github} />
+		</a>
+		<a href="/rss.xml" class="icon-button">
+			<Fragment set:html={rss} />
 		</a>
 		<a href="mailto:ruud091@gmail.com" class="icon-button">
 			<Fragment set:html={email} />
