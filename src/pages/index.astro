@@ -16,27 +16,22 @@ const essays = await getCollection('essays');
 		<main>
 			<BlogHeader />
 			{essays.map((essay) => (
-				<a href={`/${essay.slug}`}>
-					<section>
+				<section>
+					<a href={`/${essay.slug}`}>
 						<span>{essay.data.title}</span>
 						<TimeStamp date={essay.data.publishedDate}/>
-					</section>
-				</a>
+					</a>
+				</section>
 			))}
 		</main>
 	</body>
 </html>
 <style is:global>
-	main {
-		max-width: 624px;
-		margin: 0 auto;
-		padding: 60px 24px 24px;
-	}
-
-	section {
+	section a {
+		display: inline-block;
 		height: 48px;
 		padding-block: 12px;
-		padding-inline-start: 4px;
+		padding-inline: 4px;
 	}
 
 	section span {
@@ -47,6 +42,6 @@ const essays = await getCollection('essays');
 	section time {
 		font-size: 12px;
 		margin-inline-start: 4px;
-		vertical-align: bottom;
+		vertical-align: sub;
 	}
 </style>
