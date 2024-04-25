@@ -75,16 +75,43 @@ h6 {
   overflow-wrap: break-word;
 }
 
+:root {
+  font-family: "Pretendard Variable", Pretendard, -apple-system,
+  BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
+  "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
+  "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  scroll-padding-block-start: 150px;
+}
+
+:root::-webkit-scrollbar {
+  display: none;
+}
+
 #root,
 #__next {
   isolation: isolate;
 }
 
+
 body {
-  font-family: "Pretendard Variable", Pretendard, -apple-system,
-    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
-    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  background-color: #f9f9f9;
+
+  --color-primary: #000000;
+  --color-secondary: #343a40;
+  --color-tertiary: #495057;
+  --color-quaternary: #868e96;
+}
+
+body.dark {
+  background-color: #131414;
+
+  --color-primary: #ffffff;
+  --color-secondary: #ced4da;
+  --color-tertiary: #868e96;
+  --color-quaternary: #495057;
 }
 
 main {
@@ -93,18 +120,9 @@ main {
   padding: 60px 24px 12px;
 }
 
-:root {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-:root::-webkit-scrollbar {
-  display: none;
-}
-
-body.dark {
-  background-color: #151515;
-  color: #ffffff;
+ol,
+ul {
+  padding-inline-start: 20px;
 }
 
 .icon-button {
@@ -113,6 +131,7 @@ body.dark {
   height: 34px;
   padding: 8px;
   border-radius: 4px;
+  color: var(--color-secondary);
 }
 
 .icon-button:hover {
@@ -121,8 +140,4 @@ body.dark {
 
 body.dark .icon-button:hover {
   background-color: #212529;
-}
-
-body.dark .icon-button img {
-  filter: invert(1);
 }
