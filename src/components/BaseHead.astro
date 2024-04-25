@@ -75,16 +75,18 @@ const socialUrl = Astro.site?.href + 'assets/social.png';
 />
 
 <!-- Theme -->
-<script is:inline>
-  const root = document.documentElement;
-  const theme = localStorage.getItem('theme');
+<script>
+  function init() {
+    const isDark = localStorage.getItem("theme") !== 'light'
+      || window.matchMedia("(prefers-color-scheme: light)").matches;
 
-  if (
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-    || theme === 'dark'
-  ) {
-    root.classList.add('dark');
-  } else {
-    root.classList.remove('dark');
+    if (isDark) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
   }
+
+  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("astro:after-swap", init);
 </script>
