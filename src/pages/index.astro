@@ -1,6 +1,10 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import BlogHeader from '../components/BlogHeader.astro';
+import TimeStamp from '../components/TimeStamp.astro';
+import { getCollection } from 'astro:content';
+
+const essays = await getCollection('essays');
 ---
 
 <!doctype html>
@@ -11,13 +15,38 @@ import BlogHeader from '../components/BlogHeader.astro';
 	<body>
 		<main>
 			<BlogHeader />
+			{essays.map((essay) => (
+				<a href={`/${essay.slug}`}>
+					<section>
+						<span>{essay.data.title}</span>
+						<TimeStamp date={essay.data.publishedDate}/>
+					</section>
+				</a>
+			))}
 		</main>
 	</body>
 </html>
-<style>
+<style is:global>
 	main {
-		width: 624px;
+		max-width: 624px;
 		margin: 0 auto;
-		padding: 24px;
+		padding: 60px 24px 24px;
+	}
+
+	section {
+		height: 48px;
+		padding-block: 12px;
+		padding-inline-start: 4px;
+	}
+
+	section span {
+		font-size: 18px;
+		vertical-align: middle;
+	}
+
+	section time {
+		font-size: 12px;
+		margin-inline-start: 4px;
+		vertical-align: bottom;
 	}
 </style>
