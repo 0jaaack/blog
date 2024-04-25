@@ -1,7 +1,7 @@
 ---
 import github from "../assets/github.svg?raw";
+import email from "../assets/email.svg?raw";
 import ThemeButton from "./ThemeButton.tsx";
-import EmailButton from "./EmailButton.tsx";
 ---
 <header>
 	<a href="/" class="blog-title">
@@ -12,7 +12,9 @@ import EmailButton from "./EmailButton.tsx";
 		<a href="https://github.com/0jaaack" class="icon-button" target="_blank" rel="noopener noreferrer">
 			<Fragment set:html={github} />
 		</a>
-		<EmailButton client:only />
+		<a href="mailto:ruud091@gmail.com" class="icon-button">
+			<Fragment set:html={email} />
+		</a>
 	</nav>
 </header>
 <style>
