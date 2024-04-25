@@ -1,0 +1,115 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import TimeStamp from '../../components/TimeStamp.astro';
+import undo from '../../assets/undo.svg?raw';
+import ThemeButton from '../../components/ThemeButton';
+
+type Props = CollectionEntry<'essays'>;
+
+export async function getStaticPaths() {
+	const essays = await getCollection('essays');
+	return essays.map((essay) => ({
+		params: { slug: essay.slug },
+		props: essay,
+	}));
+}
+
+const essay = Astro.props;
+const { Content } = await essay.render();
+---
+
+<html lang="ko">
+	<head>
+		<BaseHead
+			title={essay.data.title}
+			description="공재혁 블로그"
+			imageUrl={`${Astro.url}/${essay.slug}-og.png`}
+		/>
+	</head>
+	<body>
+		<main>
+			<div class="button-collection">
+				<a href="/" class="icon-button">
+					<Fragment set:html={undo} />
+				</a>
+				<ThemeButton client:only="preact" />
+			</div>
+			<article>
+				<TimeStamp date={essay.data.publishedDate} />
+				<h1>{essay.data.title}</h1>
+				<Content />
+			</article>
+		</main>
+	</body>
+</html>
+<style is:global>
+	article > time {
+		color: var(--color-secondary);
+		font-size: 12px;
+		margin-inline-start: 4px;
+		vertical-align: bottom;
+	}
+
+	article > h1 {
+		font-size: 24px;
+		color: var(--color-primary);;
+		margin-block-end: 24px;
+	}
+
+	article > h2 {
+		font-size: 20px;
+		color: var(--color-primary);;
+		margin-block-end: 8px;
+	}
+
+	article > p {
+		color: var(--color-secondary);
+		line-height: 28px;
+		margin-block-end: 24px;
+	}
+
+	img + em {
+	  display: block;
+		font-size: 14px;
+		font-style: normal;
+		color: var(--color-tertiary);
+	}
+
+	article a {
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+
+	article sup a {
+		color: var(--color-primary);
+		text-decoration: none;
+	}
+
+	article .footnotes {
+		color: var(--color-tertiary);
+		font-size: 14px;
+		padding-block-start: 16px;
+		margin-block-start: 48px;
+		border-top: 1px solid var(--color-quaternary);
+	}
+
+	article .footnotes li {
+		margin-block-start: 12px;
+	}
+
+	article .footnotes a {
+		text-decoration: none;
+	}
+
+	h2.sr-only {
+		display: none;
+	}
+
+	.button-collection {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-block-end: 12px;
+	}
+</style>
