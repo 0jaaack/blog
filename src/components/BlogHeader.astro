@@ -4,43 +4,32 @@ import ThemeButton from "./ThemeButton.tsx";
 import EmailButton from "./EmailButton.tsx";
 ---
 <header>
-	<a href="/" class="blog-name">
+	<a href="/" class="blog-title">
 		<span>Jaaack</span>
 	</a>
 	<nav>
 		<ThemeButton client:only />
-		<EmailButton client:only />
-		<a href="https://github.com/0jaaack" target="_blank" rel="noopener noreferrer">
+		<a href="https://github.com/0jaaack" class="icon-button" target="_blank" rel="noopener noreferrer">
 			<Fragment set:html={github} />
 		</a>
+		<EmailButton client:only />
 	</nav>
 </header>
-<style is:global>
+<style>
 	header {
 		display: flex;
 		align-items: center;
 		margin-bottom: 24px;
 	}
 
-	.blog-name {
+	.blog-title {
 		font-size: 24px;
 		font-weight: 700;
 	}
 
 	nav {
 		display: flex;
-		gap: 20px;
+		gap: 12px;
 		margin-left: auto;
-	}
-
-	nav a, nav button {
-		display: inline-block;
-		width: 36px;
-		height: 36px;
-		padding: 8px;
-	}
-
-	body.dark nav img {
-		filter: invert(1);
 	}
 </style>

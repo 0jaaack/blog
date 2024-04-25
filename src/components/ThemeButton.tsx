@@ -25,7 +25,7 @@ export default function ThemeButton() {
   };
 
   return (
-    <button onClick={toggleTheme}>
+    <button class="icon-button" onClick={toggleTheme}>
       {theme === "dark" ? DarkIcon : LightIcon}
     </button>
   );
