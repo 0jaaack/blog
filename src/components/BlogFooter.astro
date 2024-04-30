@@ -1,0 +1,23 @@
+---
+import github from "../assets/github.svg?raw";
+import email from "../assets/email.svg?raw";
+import rss from "../assets/rss.svg?raw";
+---
+
+<footer>
+  <a href="/rss.xml" class="icon-button">
+    <Fragment set:html={rss} />
+  </a>
+  <a href="https://github.com/0jaaack" class="icon-button" target="_blank" rel="noopener noreferrer">
+    <Fragment set:html={github} />
+  </a>
+  <a href="mailto:ruud091@gmail.com" class="icon-button">
+    <Fragment set:html={email} />
+  </a>
+</footer>
+<style>
+  footer {
+    padding-block: 16px;
+    color: var(--color-tertiary);
+  }
+</style>

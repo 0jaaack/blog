@@ -1,6 +1,7 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import BlogHeader from '../components/BlogHeader.astro';
+import BlogFooter from '../components/BlogFooter.astro';
 import TimeStamp from '../components/TimeStamp.astro';
 import { getCollection } from 'astro:content';
 
@@ -24,13 +25,14 @@ const essays = await getCollection('essays')
 					</a>
 				</section>
 			))}
+			<BlogFooter />
 		</main>
 	</body>
 </html>
 <style is:global>
 	section a {
 		display: inline-block;
-		height: 48px;
+		height: 44px;
 		padding-block: 12px;
 		padding-inline: 4px;
 	}
