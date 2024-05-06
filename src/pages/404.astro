@@ -1,0 +1,34 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import undo from '../assets/undo.svg?raw';
+---
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title="jaaack.dev" description="공재혁 블로그" />
+	</head>
+	<body>
+		<main>
+      <h1>페이지를 찾을 수 없습니다</h1>
+      <span>주소가 잘못 입력되었거나 삭제된 게시물입니다.</span>
+      <a href="/" class="icon-button">
+        <Fragment set:html={undo} />
+      </a>
+		</main>
+	</body>
+</html>
+<style>
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-block-start: 300px;
+    color: var(--color-primary);
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+</style>
