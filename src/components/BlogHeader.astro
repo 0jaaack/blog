@@ -5,9 +5,7 @@ import rss from "../assets/rss.svg?raw";
 import ThemeButton from "./ThemeButton.tsx";
 ---
 <header>
-	<a href="/" class="blog-title">
-		<span>Jaaack</span>
-	</a>
+	<span>Jaaack</span>
 	<nav>
 		<ThemeButton client:only="preact" />
 	</nav>
@@ -18,9 +16,10 @@ import ThemeButton from "./ThemeButton.tsx";
 		margin-block-end: 12px;
 	}
 
-	.blog-title {
+	span {
 		font-size: 24px;
 		font-weight: 700;
+		user-select: none;
 	}
 
 	nav {
