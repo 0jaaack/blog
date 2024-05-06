@@ -29,7 +29,7 @@ const { Content } = await essay.render();
 				<a href="/" class="icon-button">
 					<Fragment set:html={undo} />
 				</a>
-				<ThemeButton client:only />
+				<ThemeButton client:only="preact" />
 			</div>
 			<article>
 				<TimeStamp date={essay.data.publishedDate} />
