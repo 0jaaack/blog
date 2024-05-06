@@ -83,6 +83,7 @@ body {
   --color-primary: #000000;
   --color-secondary: #343a40;
   --color-tertiary: #495057;
+  --color-quaternary: #868e96;
 }
 
 body.dark {
@@ -91,6 +92,7 @@ body.dark {
   --color-primary: #ffffff;
   --color-secondary: #ced4da;
   --color-tertiary: #868e96;
+  --color-quaternary: #495057;
 }
 
 :root {
