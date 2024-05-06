@@ -5,7 +5,8 @@ import BlogFooter from '../components/BlogFooter.astro';
 import TimeStamp from '../components/TimeStamp.astro';
 import { getCollection } from 'astro:content';
 
-const essays = await getCollection('essays');
+const essays = await getCollection('essays')
+	.then((essays) => essays.sort((a, b) => new Date(b.data.publishedDate).getTime() - new Date(a.data.publishedDate).getTime()));
 ---
 
 <!doctype html>
