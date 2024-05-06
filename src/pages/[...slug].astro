@@ -40,20 +40,55 @@ const { Content } = await essay.render();
 	</body>
 </html>
 <style is:global>
-	article time {
+	article > time {
+		color: var(--color-secondary);
 		font-size: 12px;
 		margin-inline-start: 4px;
 		vertical-align: bottom;
 	}
 
-	article h1 {
+	article > h1 {
 		font-size: 24px;
+		color: var(--color-primary);;
 		margin-block-end: 24px;
 	}
 
-	article p {
+	article > h2 {
+		font-size: 20px;
+		color: var(--color-primary);;
+		margin-block-end: 8px;
+	}
+
+	article > p {
+		color: var(--color-secondary);
 		line-height: 28px;
-		margin-block-end: 20px;
+		margin-block-end: 24px;
+	}
+
+	article a {
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+
+	article sup a {
+		color: var(--color-primary);
+		text-decoration: none;
+	}
+
+	article .footnotes {
+		color: var(--color-tertiary);
+		font-size: 14px;
+		padding-block-start: 16px;
+		margin-block-start: 48px;
+		border-top: 1px solid #495057;
+	}
+
+	article .footnotes a {
+		text-decoration: none;
+	}
+
+	h2.sr-only {
+		display: none;
 	}
 
 	.button-collection {
