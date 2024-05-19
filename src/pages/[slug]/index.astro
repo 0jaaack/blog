@@ -1,9 +1,9 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import TimeStamp from '../components/TimeStamp.astro';
-import undo from '../assets/undo.svg?raw';
-import ThemeButton from '../components/ThemeButton';
+import BaseHead from '../../components/BaseHead.astro';
+import TimeStamp from '../../components/TimeStamp.astro';
+import undo from '../../assets/undo.svg?raw';
+import ThemeButton from '../../components/ThemeButton';
 
 type Props = CollectionEntry<'essays'>;
 
@@ -21,7 +21,11 @@ const { Content } = await essay.render();
 
 <html lang="ko">
 	<head>
-		<BaseHead title={essay.data.title} description="공재혁 블로그" />
+		<BaseHead
+			title={essay.data.title}
+			description="공재혁 블로그"
+			imageUrl={`${Astro.url}/${essay.slug}-og.png`}
+		/>
 	</head>
 	<body>
 		<main>
