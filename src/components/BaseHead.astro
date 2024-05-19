@@ -6,12 +6,12 @@ interface Props {
 	title: string;
 	description: string;
 	url?: string;
+  imageUrl?: string;
 }
 
-const { title, description, url } = Astro.props;
+const { title, description, url, imageUrl } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const socialUrl = Astro.site?.href + 'assets/social.png';
 ---
 
 <!-- Global Metadata -->
@@ -28,14 +28,14 @@ const socialUrl = Astro.site?.href + 'assets/social.png';
 <meta property="og:url" content={url ?? canonicalUrl} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={socialUrl} />
+<meta property="og:image" content={imageUrl} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={url ?? canonicalUrl} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={socialUrl} />
+<meta property="twitter:image" content={imageUrl} />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalUrl} />
