@@ -7,7 +7,7 @@ export function PostOpenGraphImage(essay: Essay): JSX.Element {
       style={{
         display: "flex",
         flexDirection: "column",
-        padding: "24px",
+        padding: "24px 80px",
         backgroundColor: "#ffffff",
       }}
     >
