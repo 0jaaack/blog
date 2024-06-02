@@ -69,6 +69,17 @@ const { Content } = await essay.render();
 		margin-block-end: 24px;
 	}
 
+	article > pre {
+		background-color: unset !important;
+		overflow: hidden !important;
+		margin-block-end: 24px;
+		white-space: pre-wrap;
+	}
+
+	article pre code {
+		line-height: 20px;
+	}
+
 	img + em {
 	  display: block;
 		font-size: 14px;
