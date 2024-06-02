@@ -96,6 +96,11 @@ body.dark {
   --color-quaternary: #495057;
 }
 
+body.dark .astro-code,
+body.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+}
+
 :root {
   font-family: "Pretendard Variable", Pretendard, -apple-system,
     BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
