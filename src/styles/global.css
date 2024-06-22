@@ -81,6 +81,8 @@ h6 {
 }
 
 body {
+  background-color: #f9f9f9;
+
   --color-primary: #000000;
   --color-secondary: #343a40;
   --color-tertiary: #495057;
