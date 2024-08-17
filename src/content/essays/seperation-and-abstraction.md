@@ -1,16 +1,18 @@
 ---
-title: 함수, 분리하지 말고 추출하자
+title: 함수, 분리말고 추출하자
 publishedDate: Jun 2 2024
 slug: seperation-and-abstraction
 ---
 
-개발을 하면서 들었던 인상적인 조언은 ‘분리하기보다는 추출하라’는 말이다. 처음 이 말을 들었을 때부터 항상 마음 속에 간직하고 있었는데, 단순한 조언이지만 파급력이 매우 컸었고, 또 그렇기에 다른 사람들에게도 전하고 싶었다.
+개발을 하면서 들었던 인상적인 조언은 ‘분리하기보다는 추출하라’는 말이다. 처음 이 말을 들었을 때부터 항상 마음 속에 간직하고 있었는데, 단순한 조언이지만 파급력이 매우 컸었고, 또 그렇기에 다른 사람들에게도 전하고 싶어서 쓰게 되었다.
 
-코드는 필연적으로 비대해지고 복잡해진다. 복잡한 코드는 읽기도 싫을 뿐더러 고치기도 힘들다. 테스트하기는 더더욱 힘들다. 만약 내가 어떤 코드를 읽었을 때 로직을 읽는게 아니라 코드를 해석하고있다면 그건 그 코드가 복잡하다는 뜻이 된다. 코드가 복잡해지는 이유는 로직이 표현하고 싶은 바가 감춰져있기 때문이다. 정확히 얘기하면 파묻혀있다는 말이 더 맞을 수도 있다.
+코드는 필연적으로 비대해지고 복잡해진다. 프로그램이 발전할수록 기능이 점점 더 추가되고 요구사항도 많아진다. 처음에는 단순하게 작성했던 기능도 몇 달이 지나고 여러 사람의 손을 거치면 순식간에 어마무시한 코드 베이스가 만들어진다.
 
-간단하게 예시를 들어보자. 사용자들의 배열을 받아 나이가 65세 이상인 사용자들을 반환하는 함수를 작성한다고 하자. 그러면 이렇게 나타낼 수 있다.
+보통은 이런 상황에서 복잡한 **로직을 분리**하게 된다. 개인적으로는 분리하는 것과 추출하는 것은 엄연히 다른 개념이라고 생각한다.[^1] 두 개의 개념을 하나의 개념으로 뭉뚱그려서 생각하기 쉽지만 분리와 추출을 구분지어서 생각하게되면 추상화하는 방식이 달라지고, 프로그램의 복잡도도 완전히 달라질 수 있다.
 
-```jsx
+간단하게 예시를 들어보자. 사용자들 중에서 나이가 65세 이상인 사용자들을 반환하는 함수를 작성한다고 하자. 그러면 아래처럼 나타낼 수 있다.
+
+```js
 function getSilverUsers(users) {
   const result = [];
 
@@ -25,8 +27,7 @@ function getSilverUsers(users) {
   return result;
 }
 ```
-
-로직은 **의사[^1]를 이루는 요소**들과 그것들을 성공적으로 실행시키기 위한 **문법적 요소**로 구성된다. 로직의 의사적 요소, 즉 로직이 나타내고자 하는 바는 “**users에서 age가 65세 이상인 user를 걸러낸다**"는 점이다. for loop와 배열의 push 메소드 등은 문법적 요소다. 로직에서 문법적 요소가 많아질수록 코드는 읽기 어려워진다. 우리의 뇌가 로직의 흐름을 읽는게 아니라 코드를 해석해내야 하기 때문이다. 그래서 우리는 순전히 의사를 표현하는 데 집중할 수 있도록 문법적 요소를 줄여볼 것이다. 문법적 요소들은 보통 일정한 패턴을 보이며 반복되기도 한다. 반복되는 보일러 플레이트, 특정 자료구조에 종속된 문법들을 추상화하여 로직에 의사만 남길 수 있도록 해볼 것이다.
+여기서 로직을 추출해보면, 아래 코드처럼 해볼 수 있다.
 
 ```jsx
 function filter(arr, callback) {
@@ -42,300 +43,338 @@ function filter(arr, callback) {
 }
 
 function getSilverUsers(users) {
-  return filter( // 걸러내고 반환한다
-    users, // users에서
-    (user) => user.age >= 65 // age가 65 이상인 경우에
+  return filter(
+    users,
+    (user) => user.age >= 65,
   );
 }
 ```
 
-로직을 `filter`라는 함수로 추출했다. `filter`라는 메소드 덕분에 나머지 로직은 거의 핵심적인 요소만 남게 되었다. 이게 바로 추출하기의 방법이다. 복잡한 문법이나 구현의 세부사항을 감추고 함수명으로 동작을 간결하게 설명한다. 추출하기를 통해 더욱 표현력있는 로직을 작성할 수 있게 된다.
+`filter`라는 함수를 만들어 추출해보았다. 추출은 로직의 복잡도를 줄이는데 아주 좋은 수단이라고 생각한다. `getSilverUsers` 함수에서 하고 싶었던 일은 결국 특정 조건의 유저를 걸러내어 반환하는 일인데, 조금 더 간결하게 이해할 수 있게 됐다.
 
-위 예제에서 배열의 `filter` 메소드를 쓰면 안되나?라고 할 수도 있다. 추출하기의 예제를 보여주고 싶어 이렇게 한 것이지, 배열의`filter`를 써도 된다. 다만 주의할 점은, 그렇게되면 `users`는 `filter` 메소드를 가진 데이터에만 적용할 수 있게 된다. 그보다는 `users`가 단순히 순회가능한 값(iterable)이라는 가정으로도 해결할 수 있기에, 뒤의 가정이 앞으로 조금 더 너그러운 함수로 발전될 수 있다[^2]. 추출한 함수가 더 폭넓은 형태의 값을 받아들일 수 있게되면, 더 넓은 범위에서 사용할 수 있게 된다[^3].
+추출의 핵심은 딱 필요한 것만 남기는 것이다. `getSilverUsers`에서는 **users에서 특정 조건의 유저를 걸러내기** 이외에는 불필요하다고 볼 수 있다. 주로 배열의 문법적인 요소들이다. 그래서 의사적인 요소만 남도록 추출해준 것이다.
 
-추출하기에 대해 알아보았다. 추출하기의 반대로 분리하기 방식으로도 풀어나갈 수 있다. 분리하는 것은 말 그대로 덩어리째 멀리 떨어뜨려 놓는 것이다. 코드를 여러 부분으로 나누어서, 각 부분이 할당하는 일 같은 것을 정해두고 거기에 맞는 코드를 적재한다. 추출은 위에서도 보았듯이, 핵심만 뽑아내 남기는 것이다. 코드에서 의사를 이루는 부분을 드러내도록 하게 만든다. 다른 말로는 추상화라고도 한다. 거대하고 복잡한 로직을 풀어나갈 때 어떤 방식을 택하느냐에 따라 큰 차이를 불러일으킨다.
+반면 분리는 그냥 코드를 밖으로 빼내는 것이다. 분리하는 코드가 로직의 의사적인 요소인지를 구분하지 않고, 단순히 코드를 분리하기만 하면 복잡도는 오히려 증가한다. 로직의 응집도가 떨어지게 되기 때문이다. 나는 단순히 코드를 분리하는 건 추출을 잘못 한 것이라고 생각한다.
 
-두 방식의 차이를 예제를 통해 비교해보자. 계좌 이체를 수행하는 로직 `transferBank` 함수를 간단하게 만들어보았다[^4].
+그렇다면 추출의 장점인 간결함을 조금 더 확실하게 느끼기 위해서 조금 더 장황한 코드를 간결하게 해보자. 틱택토 게임[^2]을 간단하게 만들어보았다. 어느정도 의도적으로 장황하게 작성한 면이 있으므로 코드를 하나하나 세세하게 이해할 필요는 없다. 대신에 어떤 로직인지 간략하게 주석을 적어두었다.
 
-```jsx
-function transferBank(fromAccountBankCode, toAccountBankCode, amount) {
-  let fromAccount = null;
-
-  for (let i = 0; i <= accounts.length; i++) {
-    const account = accounts[i];
-
-    if (account.bankCode === fromAccountBankCode) {
-      fromAccount = account;
-    }
-  }
-
-  if (fromAccount == null) {
-    throw new Error('출금하는 계좌를 찾을 수 없습니다');
-  }
-
-  let toAccount = null;
-
-  for (let i = 0; i <= accounts.length; i++) {
-    const account = accounts[i];
-
-    if (account.bankCode === toAccountBankCode) {
-      toAccount = account;
-    }
-  }
-
-  if (toAccount == null) {
-    throw new Error('입금하는 계좌를 찾을 수 없습니다');
-  }
-
-  let fromAccountBalance = 0;
-
-  for (let j = 0; j <= fromAccount.transferHistory.length; j++) {
-    const transfer = fromAccount.transferHistory[j];
-    switch (transfer.type) {
-      case '입금':
-        fromAccountBalance += transfer.amount;
-        break;
-      case '출금':
-        fromAccountBalance -= transfer.amount;
-        break;
-    }
-  }
-
-  if (fromAccountBalance < amount) {
-    throw new Error('보내는 계좌의 잔액이 부족합니다');
-  }
-
-  fromAccount.bankHistory.push({
-    type: '출금',
-    amount,
-  });
-
-  toAccount.bankHistory.push({
-    type: '입금',
-    amount,
-  });
-
-  return {
-    result: 'success',
-  };
-}
-```
-
-먼저 '분리하기'를 해보자. 계좌 이체는 1. 두 계좌를 확인 2. 출금하는 계좌에서 출금 3. 입금하는 계좌로 입금 단계로 나눌 수 있다. 각 단계를 함수로 분리할 수 있어보인다.
+복잡성을 줄이는 것 뿐만 아니라, 추출을 할 때의 또 다른 장점들도 있는데 그건 차차 얘기해보려고 한다.
 
 ```jsx
-function getAccount(accountBankCode) {
-  let account = null;
+function runGame() {
+  let turn = 0;
+  const board = [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ];
 
-  for (let i = 0; i <= accounts.length; i++) {
-    const account = accounts[i];
+  while (turn < board.length * board.length) {
+    // 현재 플레이어 판별하기
+    const player = turn % 2 === 0 ? 'x' : 'o';
+    console.log(`${player}'s turn`);
 
-    if (account.bankCode === fromAccountBankCode) {
-      fromAccount = account;
-    }
-  }
+    // 보드의 랜덤한 곳에 수 놓기
+    const targetIndex = Math.floor(Math.random() * (board.length * board.length - turn));
+    let unmarkedIndex = 0;
 
-  if (account == null) {
-    throw new Error('계좌를 찾을 수 없습니다');
-  }
+    for (let i = 0; i < board.length * board.length; i++) {
+      const rowIndex = Math.floor(i / board.length);
+      const cellIndex = i % board.length;
+      const cell = board[rowIndex][cellIndex];
 
-  return account;
-}
+      if (cell !== null) {
+        continue;
+      }
+      if (unmarkedIndex === targetIndex) {
+        board[rowIndex][cellIndex] = player;
 
-function getAccountBalance(account) {
-  let accountBalance = 0;
-
-  for (let i = 0; i <= fromAccount.transferHistory.length; i++) {
-    const transfer = fromAccount.transferHistory[i];
-    switch (transfer.type) {
-      case '입금':
-        accountBalance += transfer.amount;
         break;
-      case '출금':
-        accountBalance -= transfer.amount;
-        break;
+      }
+
+      unmarkedIndex += 1;
     }
-  }
 
-  return accountBalance;
-}
+    console.log(board);
 
-function withDraw(account, amount) {
-  const accountBalance = getAccountBalance(account);
+    // 가로 검사
+    for (const row of board) {
+      let isAllCellsMarked = true;
 
-  if (accountBalance < amount) {
-    throw new Error('계좌의 잔액이 부족합니다.');
-  }
-
-  account.bankHistory.push({
-    type: '출금',
-    amount,
-  });
-}
-
-function desposit(account, amount) {
-  account.bankHistory.push({
-    type: '입금',
-    amount,
-  });
-}
-
-function transferBank(fromAccountBankCode, toAccountBankCode, amount) {
-  checkAccountExist(fromAccountBankCode);
-  checkAccountExist(toAccountBankCode);
-
-  withDraw(
-    fromAccountBankCode,
-    amount,
-  );
-  desposit(
-    toAccountBankCode,
-    amount,
-  );
-}
-```
-
-분리한 코드들을 자세히 보면, 하나의 공통점을 발견할 수 있다. 입금과 출금, 그리고 계좌 잔액 같은 작업들은 모두 계좌에 관한 작업이라는 것이다. 이들을 공통된 개념을 가지고 있으므로 묶어줄 수 있어보인다. 분리하기 기법은 자연스럽게 묶어주기로 이어진다. 분리하기는 위에서 보았던 추출하기와는 다르게, 의사적 요소까지 가져가게 되는 경우가 많다. 이렇게 흩어지는 의사적 요소는 특정 영역에서의 의사적 요소로 다시 모여지게 된다.
-
-이번에는 추출을 해보자. 다시 원래의 코드로 돌아왔다. 추출에서는 배열에서 특정 요소를 찾는 동작, 더하는 동작, 비교하는 동작 등을 함수로 추출해볼 예정이다. 이전 예제에서 `filter`를 만들어준 것과 비슷하게 말이다.
-
-```jsx
-function find(arr, callback, eff) {
-  for (let i = 0; i <= arr.length; i++) {
-    if (callback(arr[i])) {
-      return result;
-    }
-  }
-
-  eff.none?.();
-}
-
-function sum(arr) {
-  let result = 0;
-
-  for (let i = 0; i <= arr.lenght; i++) {
-    result += arr[i];
-  }
-
-  return result;
-}
-
-function map(arr, callback) {
-  const result = [];
-
-  for (let i = 0; i <= arr.lenght; i++) {
-    result.push(arr[i]);
-  }
-
-  return result;
-}
-
-function compare(a, b, eff) {
-  if (a < b) {
-    eff.less?.();
-  } else if (a > b) {
-    eff.greater?.();
-  } else if (a === b) {
-    eff.equal?.();
-  }
-}
-
-function append(arr, item) {
-  arr.push(item);
-  return;
-}
-
-function transferBank(fromAccountBankCode, toAccountBankCode, amount) {
-  const fromAccount = find(
-    accounts,
-    (account) => account.bankCode === fromAccountBankCode,
-    {
-      none: () => throw new Error('출금하는 계좌를 찾을 수 없습니다'),
-    }
-  );
-
-  const fromAccountBalance = sum(
-    map(
-      fromAccount.transferHistory,
-      (transfer) => {
-        switch (transfer.type) {
-          case '입금':
-            return transfer.amount;
-          case '출금':
-            return transfer.amount * -1;
+      for (const cell of row) {
+        if (cell !== player) {
+          isAllCellsMarked = false;
+          break;
         }
-      },
+      }
+
+      if (isAllCellsMarked) {
+        console.log(`${player} win!`);
+        return;
+      }
+    }
+
+    // 세로 검사
+    for (let j = 0; j < board.length; j++) {
+      let isAllCellsMarked = true;
+
+      for (const row of board) {
+        const cell = row[j];
+
+        if (cell !== player) {
+          isAllCellsMarked = false;
+          break;
+        }
+      }
+
+      if (isAllCellsMarked) {
+        console.log(`${player} win!`);
+        return;
+      }
+    }
+
+    // (0, 0) -> (2, 2) 검사
+    {
+      let isAllCellsMarked = true;
+
+      for (let k = 0; k < board.length; k++) {
+        const cell = board[k][k];
+
+        if (cell !== player) {
+          isAllCellsMarked = false;
+          break;
+        }
+      }
+
+      if (isAllCellsMarked) {
+        console.log(`${player} win!`);
+        return;
+      }
+    }
+
+    // (0, 2) -> (2, 0) 검사
+    {
+      let isAllCellsMarked = true;
+
+      for (let l = 0; l < board.length; l++) {
+        const cell = board[l][board.length - 1 - l];
+
+        if (cell !== player) {
+          isAllCellsMarked = false;
+          break;
+        }
+      }
+
+      if (isAllCellsMarked) {
+        console.log(`${player} win!`);
+        return;
+      }
+    }
+
+    turn += 1;
+  }
+
+  // 무승부 시 처리 로직
+  console.log('draw');
+}
+
+runGame();
+```
+
+위의 로직을 단순하게 만들어보자. 가장 먼저 눈에 띄는 점은 가로, 세로, 대각선 라인을 검사하는 로직이 복잡해보인다. 전체 로직에서 많은 부분이 검사 로직에 할애된다. 추출을 하는 기준이 무조건 라인 수로 결정되는 것은 아니지만, 검사 로직들은 비슷한 로직이 너무 많이 반복되고 단순 문법적인 요소들이 너무나 많이 보인다.
+
+로직이 반복되는 이유는 행, 열, 대각선 줄을 검사하는 로직 만들기가 다 제각각이라서 그렇다. 각 경우를 순회하는 방법이 다 달라 비슷하지만 다른 로직들이 반복되는 것이다. 사실 핵심적인 부분인, 모든 셀이 마크되었는지 검사하는 로직은 동일하다.
+
+게임 보드에서 행과 열, 대각선을 가져오는 로직을 추출하면, 반복되는 로직들을 줄일 수 있을 것 같다.
+
+```jsx
+function rows(board) {
+  const rows = [];
+
+  for (const row of board) {
+    rows.push(row);
+  }
+
+  return rows;
+}
+
+function columns(board) {
+  const columns = [];
+
+  for (let i = 0; i < board.length; i++) {
+    const column = [];
+
+    for (const row of board) {
+      column.push(row[i]);
+    }
+
+    columns.push(column);
+  }
+
+  return columns;
+}
+
+function diagonals(board) {
+  const mainDiagonal = [];
+  const antiDiagonal = [];
+
+  for (let i = 0; i < board.length; i++) {
+    mainDiagonal.push(board[i][i]);
+  }
+  for (let j = 0; j < board.length; j++) {
+    antiDiagonal.push(board[j][board.length - 1 - j]);
+  }
+
+  return [mainDiagonal, antiDiagonal];
+}
+
+function some(iterable, callback) {
+  for (const element of iterable) {
+    if (callback(element)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function every(iterable, callback) {
+  for (const element of iterable) {
+    if (!callback(element)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function runGame() {
+  // ...이전 로직 생략...
+
+  // 가로, 세로, 대각선 검사
+  const isGameOver = some(
+    [
+      ...rows(board),
+      ...columns(board),
+      ...diagonals(board),
+    ],
+    (row) => every(
+      row,
+      (cell) => cell === player
     ),
   );
 
-  compare(fromAccountBalance, amount, {
-    less: () => throw new Error('보내는 계좌의 잔액이 부족합니다'),
-  });
+  if (isGameOver) {
+    console.log(`${player} win!`);
+    return;
+  }
 
-  append(
-    fromAccount.bankHistory,
-    { type: '출금', amount },
-  );
-  append(
-    fromAccount.bankHistory,
-    { type: '입금', amount },
-  );
+  // ...이후 로직 생략...
 }
+
+runGame();
 ```
 
-이렇게 추출을 완료했다. 이번에도 문법적 요소를 줄이고 의사적 요소가 남도록 만들었다. 여기서 추출한 코드들을 더 자세히 살펴보자. 추출한 코드 내에서도 또 추출해줄 수 있어 보이는 부분이 생긴다. 예를들어 함수를 순회하면서 특정 동작을 하는 부분을 추출해줄 수 있다. 추출에서 추출을 다시 하게되는 셈이다. 추출한 함수들을 조합해 새로운 방식의 함수를 만들어내 줄 수 있다. 분리하기가 묶어주는 것으로 이어지는 것처럼, 추출하기는 합성하기로 이어질 수 있다. 추출에서 합성으로 이어지는 패턴들은 재사용성의 핵심이다.
+게임 보드에서 행과 열, 대각선 줄을 가져올 수 있는 `rows`, `columns`, `diagonals`를 정의해서 간결하게 로직을 만들었다. 여기에 내가 추가로 `some`, `every`를 정의해보았는데, `Array.prototype.some`, `Array.prototype.every`과 거의 동일한 역할을 한다[^3].
+
+위 함수들로 복잡하고 반복되었던 검사 로직을 간결하게 만들었다. 그런데 사실 간결하게 만들면서 로직이 조금 더 이해하기 힘들어진 느낌도 어느정도 있다. 익숙한 방식의 문법이 아니기도 하고 의사 요소들이 읽기 편한 순서가 아니기도 해서 그렇다. 추출이 항상 옳다기 보다는, 때에 따라 적절하게 이루어져야 하는 것 같다[^4].
+
+다른 로직들, 랜덤으로 보드에 마크하는 로직도 이런 식으로 추출해볼 수 있다. 이제 굳이 더 추출하는 예시를 보여주는 것은 의미가 없을 것 같다. 대신 추출이 가지는 다른 장점들을 얘기해보자. 지금까지 알아본 추출의 장점은 복잡성을 줄이거나 반복되는 로직들을 묶어줄 수 있다는 점이었다.
+
+다른 장점도 있다. 예를 들어 `board`는 지금 이중 배열의 구조로 이루어져있다. 그리고 로직을 검사하거나 마크하는 로직도 `board`의 데이터 구조에 맞게 구성된다. 그런데 `board`의 데이터 구조가 바뀌게 된다면 어떻게 될까? 예를 들어 1차원 배열이라면? 아니면 플레이어들이 둔 수들이 저장된 객체 형태일 수도 있다. 이렇게 데이터 구조가 바뀌게되면 이와 관련된 로직이 전부 망가지게 된다. 이걸 다르게 표현한다면, `runGame`이라는 함수는 `board`의 세부 구현에 의존성을 갖게 된다.
+
+여기서 만약 `board`에 관한 로직들이 추출되었다면, `board`의 구조가 바뀌게 되더라도 `runGame` 함수 내에서 딱히 건드릴 부분이 없다. `board`와 관련된 함수만 조금씩 바꿔주면 되고, 이건 로직 전체를 확인해서 수정하는 것보다 쉽다. 이렇게 추출을 통해 특정 데이터의 세부 구현에 의존성을 줄여주는 걸 추상화의 벽(abstraction barrier)이라고 한다. 여기서 세부 구현이라 함은 데이터의 구조도 될 수 있고, 외부 라이브러리를 활용하는 로직도 될 수 있다.
 
 ```jsx
-
-function iterate(arr, callback, eff) {
-  for (let i = 0; i <= arr.length; i++) {
-    callback(arr[i]);
-  }
+// board의 구조에 의존성을 가지므로 추출해주었다.
+function emptyBoard() {
+  return [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ];
 }
 
-function find(arr, callback, eff) {
-  let result = null;
+// board의 구조, 빈 셀을 표시하는 방식에 의존성을 가진다.
+// 사실 여기서 빈 셀을 판별하는 로직과 board를 순회하는 로직을 추출한다면, unmarkedCells는 의존성을 위해 추출해줄 필요는 없다.
+function unmarkedCells(board) {
+  const cells = [];
 
-  iterate(
-    arr,
-    (item) => {
-      if (callback(item)) {
-        result = item;
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      if (board[i][j] === null) {
+        cells.push([i, j]);
       }
-    },
-  );
-
-  if (result == null) {
-    eff.none?.();
+    }
   }
 
-  return result;
+  return cells;
 }
 
-function sum(arr) {
-  let result = 0;
-
-  iterate(arr, (item) => result += item);
-
-  return result;
+// 마찬가지로 board의 구조에 의존성을 가진다.
+// 무승부를 일찍 확인하는 더 좋은 방법이 있지만, 그건 나중에 이 함수를 고쳐서 해결할 수 있다.
+function isGameDraw(board) {
+  return unmarkedCells(board).length === 0;
 }
 
-function map(arr, callback) {
-  const result = [];
+// 마찬가지로 board의 구조에 의존성을 가진다.
+function markBoard(board, player, coordinate) {
+  const markedBoard = structuredClone(board);
+  const [rowIndex, columnIndex] = coordinate;
 
-  iterate(arr, (item) => result.push(callback(item)));
+  markedBoard[rowIndex][columnIndex] = player;
 
-  return result;
+  return markedBoard;
 }
+
+function runGame() {
+  let turn = 0;
+  let board = emptyBoard();
+
+  while (isGameDraw(board, turn)) {
+    // 현재 플레이어 판별하기 (이전과 동일)
+    const player = turn % 2 === 0 ? 'x' : 'o';
+    console.log(`${player}'s turn`);
+
+    // 보드의 랜덤한 곳에 수 놓기
+    // random index를 얻는 로직은 board의 구조와 상관이 없기 때문에 추출하지 않았다.
+    const unmarkedCellCount = unmarkedCells(board);
+    const randomIndex = Math.floor(Math.random() * unmarkedCells.length);
+    board = markBoard(board, player, unmarkedCells[randomIndex]);
+
+    console.log(board);
+
+    // 가로, 세로, 대각선 검사
+    // isAllCellsMarked로 추출했기 때문에 board의 세부 구현에 대한 의존성이 없다.
+    const isGameOver = some(
+      [
+        ...rows(board),
+        ...columns(board),
+        ...diagonals(board),
+      ],
+      (row) => isAllCellsMarked(row),
+    );
+
+    if (isGameOver) {
+      console.log(`${player} win!`);
+      return;
+    }
+
+    turn += 1;
+  }
+
+  // 무승부 시 처리 로직 (이전과 동일)
+  console.log('draw');
+}
+
+runGame();
 ```
 
-위의 `transferBank` 함수는 간단한 로직으로 이루어져있어 여기서 더 무언가를 파악하기는 쉽지 않다. 하지만 일종의 방향성을 엿볼 수 있는데, 예를 들어 분리하기를 적용한 코드는 기능이 더 추가되면서 복잡해지는 코드를 더 적절하게 분리하고 묶어주는 방식으로 진행될 공산이 크다. 코드가 더 복잡해질 수록 어디에 어떤 역할의 코드를 나누고 분리시키느냐가 복잡도를 줄이는 핵심이 된다. 반대로 추출하기를 보자. 추출하기를 적용하는 코드는 코드가 더해질 수록 로직을 추출할 함수가 기하급수적으로 늘어날 수 있다. 여기서는 추출된 함수를 깔끔하게 만들고 조합할 수 있도록 만든다. 얼마나 더 함수를 재사용성있게 만들고, 수많은 데이터 타입에 적용될 수 있게 만들 것인가가 핵심이 된다.
+이렇게 추출이 가지는 장점들을 알아보았다. 여기서는 단순히 함수로 추출하는 방법만 소개했는데 추출, 혹은 추상화하는 방식에는 여러 가지가 있을 수 있다. 단순히 함수가 아닌 디자인 패턴과 같은 패턴 형식으로 해볼 수도 있고 더 높은 수준에서 구조적인 측면으로 해결할 수도 있다.
 
-추출하는 것의 가장 큰 장점이라면, 코드에서 의사적 요소만 남긴다는 것이다. 바꿔 말하면 내가 프로그램에게 명령하듯이 코드를 작성할 수도 있다는 뜻이다. 이를 선언적 프로그래밍이라고도 하는데, 추출하기 기법이 발전된 형태로 이루게 된다. 의사만 남게되는 코드는 디버깅하기가 쉬워지고, 버그를 발견하기도 쉽다. 추출한 코드는 테스트하기 쉽다. 나중에 이것이 극적으로 발전하게 되면 프로그램이 표현하려는 도메인에 관한 부분을 마치 새로운 언어를 작성하듯이 만들 수 있다. 그쯤되면 단순히 추출하는 것보다 한 차원은 더 나아간 단계인 셈이다.
+추상화가 잘 이루어지면 최상위 계층의 로직은 나타내고 싶은 핵심적인 부분만 나타낼 수 있게 되는, 선언적인 구조로 작성할 수 있다.
 
-그렇지만 로직을 분리하는 것이 필요없다고 할 수는 없다. 분리하기 방식도 유용하며 우리가 흔히 많이 사용하는 방식이다. 두 가지 다 각자의 유용한 시점이 있기 마련이다. 예를 들어, ‘추출하기’로 분리한 코드를 어디에 위치시키게 될까? 프로그램이 점점 더 커지다보면 이들을 적절한 곳에 분리해야할텐데, 각 코드들을 모듈 혹은 네임스페이스로 적절하게 나누는 것도 결국 분리하기의 개념이다. 그렇지만 코드의 복잡성을 줄이거나 재사용할 수 있는 함수들을 만들 수 있다는 점에서는 추출하는 것이 더 바람직하다.
-
-[^1]: 意思
-[^2]: 예시와 설명은 모두 자바스크립트를 기준으로 한다.
-[^3]: Array는 Iterable의 한 종류이므로, Iterable이 더 폭넓은 형태이다.
-[^4]: 요즘과는 작성하는 스타일이 조금 다르나 분리하기와 추출하기의 대비를 위해서 작성된 코드라 감안하고 봐주기를 바란다. 요즘 스타일로 작성하는 코드는 이미 언어상에서 혹은 라이브러리에서 분리와 추출이 미리 이뤄지는 경우가 많다.
+[^1]: 물론 이 말의 저의가 추출하지말고 분리하자는 의미는 아닐 것이다. 로직을 분리하자는 코드 리뷰를 받았을 때 '아니요, 추출을 해야합니다'라고 할 필요는 없다..
+[^2]: 3x3 보드에서 이루어지는 오목같은 게임이다. 먼저 한 줄을 마크하는 경우 승리하게 된다.
+[^3]: 추출의 효과를 보여주기 위해서 이렇게 한 것일뿐, 배열 메소드를 써도 상관없다. 다만 내가 정의한 함수들은 array 타입 뿐만 아니라 iterable 값을 모두 받아들일 수 있다는 차이점이 있다.
+[^4]: 이와 관련해서 리액트의 개발자 중 한 명인 [댄 아브라모프의 블로그 글](https://overreacted.io/goodbye-clean-code/)을 읽어보면 좋을 것 같다.
