@@ -44,6 +44,10 @@ const { Content } = await essay.render();
 	</body>
 </html>
 <style is:global>
+	article {
+		color: var(--color-secondary);
+	}
+
 	article > time {
 		color: var(--color-secondary);
 		font-size: 12px;
@@ -53,26 +57,33 @@ const { Content } = await essay.render();
 
 	article > h1 {
 		font-size: 24px;
-		color: var(--color-primary);;
 		margin-block-end: 24px;
 	}
 
 	article > h2 {
 		font-size: 20px;
-		color: var(--color-primary);;
+		margin-block-end: 40px;
 		margin-block-end: 8px;
 	}
 
 	article > p {
 		color: var(--color-secondary);
 		line-height: 28px;
-		margin-block-end: 24px;
+		margin-block: 20px;
+	}
+
+	article > :is(ul, ol) {
+		margin-block: 20px;
+	}
+
+	article > :is(ul, ol) > li{
+		line-height: 28px;
 	}
 
 	article > pre {
 		background-color: unset !important;
 		overflow: hidden !important;
-		margin-block-end: 24px;
+		margin-block: 20px;
 		white-space: pre-wrap;
 	}
 
@@ -107,10 +118,6 @@ const { Content } = await essay.render();
 
 	article .footnotes li {
 		margin-block-start: 12px;
-	}
-
-	article .footnotes a {
-		text-decoration: none;
 	}
 
 	h2.sr-only {
