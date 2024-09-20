@@ -62,19 +62,28 @@ const { Content } = await essay.render();
 
 	article > h2 {
 		font-size: 20px;
+		margin-block-end: 40px;
 		margin-block-end: 8px;
 	}
 
 	article > p {
 		color: var(--color-secondary);
 		line-height: 28px;
-		margin-block-end: 24px;
+		margin-block: 20px;
+	}
+
+	article > :is(ul, ol) {
+		margin-block: 20px;
+	}
+
+	article > :is(ul, ol) > li{
+		line-height: 28px;
 	}
 
 	article > pre {
 		background-color: unset !important;
 		overflow: hidden !important;
-		margin-block-end: 24px;
+		margin-block: 20px;
 		white-space: pre-wrap;
 	}
 
