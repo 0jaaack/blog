@@ -24,7 +24,7 @@ const { Content } = await essay.render();
 		<BaseHead
 			title={essay.data.title}
 			description="공재혁 블로그"
-			imageUrl={`${Astro.url}/${essay.slug}-og.png`}
+			essay={essay}
 		/>
 	</head>
 	<body>
