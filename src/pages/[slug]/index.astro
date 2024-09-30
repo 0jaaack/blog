@@ -56,20 +56,31 @@ const { Content } = await essay.render();
 	}
 
 	article > h1 {
-		font-size: 24px;
-		margin-block-end: 24px;
+		font-size: 28px;
+		margin-block-end: 28px;
 	}
 
 	article > h2 {
 		font-size: 20px;
-		margin-block-end: 40px;
-		margin-block-end: 8px;
+		margin-block-start: 48px;
+		margin-block-end: 20px;
 	}
 
-	article > p {
+	article p {
 		color: var(--color-secondary);
-		line-height: 28px;
-		margin-block: 20px;
+		line-height: 30px;
+		margin-block-start: 20px;
+		margin-block-end: 24px;
+	}
+
+	article blockquote > p {
+		color: var(--color-tertiary);
+		font-size: 14px;
+		border-radius: 4px;
+	}
+
+	article blockquote > p::before {
+		content: "* ";
 	}
 
 	article > :is(ul, ol) {
@@ -80,11 +91,22 @@ const { Content } = await essay.render();
 		line-height: 28px;
 	}
 
-	article > pre {
-		background-color: unset !important;
-		overflow: hidden !important;
+	article > :is(ul, ol) > li > p:first-of-type {
+		padding-inline-start: 4px;
 		margin-block: 20px;
-		white-space: pre-wrap;
+	}
+
+	article pre {
+		background-color: var(--foreground-color) !important;
+		overflow: auto !important;
+		padding: 20px;
+		border-radius: 4px;
+	}
+
+	article p code {
+		padding-inline: 4px;
+		color: var(--color-secondary);
+		font: monospace;
 	}
 
 	article pre code {
