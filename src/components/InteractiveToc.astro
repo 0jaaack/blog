@@ -8,52 +8,54 @@ interface Props {
 const { headings } = Astro.props;
 ---
 <script>
-	const tocElement = document.getElementById('toc');
+  document.addEventListener('astro:page-load', () => {
+  	const tocElement = document.getElementById('toc');
 
-	if (tocElement == null) {
-		throw new Error('Table of contents element not found');
-	}
+  	if (tocElement == null) {
+  		return;
+  	}
 
-	const headingElements = Array.from(tocElement.querySelectorAll('li[data-toc]'));
-	const headings = headingElements.map((element) => (element as HTMLElement).dataset.toc);
-	let currentEntry: IntersectionObserverEntry | null = null;
+  	const headingElements = Array.from(tocElement.querySelectorAll('li[data-toc]'));
+  	const headings = headingElements.map((element) => (element as HTMLElement).dataset.toc);
+  	let currentEntry: IntersectionObserverEntry | null = null;
 
-	const observerCallback: IntersectionObserverCallback = (entries) => {
-		entries.forEach((entry) => {
-			const { intersectionRatio, isIntersecting, target } = entry;
+  	const observerCallback: IntersectionObserverCallback = (entries) => {
+  		entries.forEach((entry) => {
+  			const { intersectionRatio, isIntersecting, target } = entry;
 
-			if (!isIntersecting) {
-				return;
-			}
-			if (currentEntry != null && currentEntry.intersectionRatio > intersectionRatio) {
-				return;
-			}
+  			if (!isIntersecting) {
+  				return;
+  			}
+  			if (currentEntry != null && currentEntry.intersectionRatio > intersectionRatio) {
+  				return;
+  			}
 
-			currentEntry = entry;
+  			currentEntry = entry;
 
-			const highlightedIndex = headings.findIndex((heading) => heading === target.id);
+  			const highlightedIndex = headings.findIndex((heading) => heading === target.id);
 
-			headingElements.forEach((element, index) => {
-				if (index === highlightedIndex) {
-					element.classList.add('highlighted');
-				} else {
-					element.classList.remove('highlighted');
-				}
-			});
-		});
-	};
-	const observerOptions = {
-		rootMargin: '0px 0px -50%',
-		threshold: [...Array(100)].map((_, index) => index / 100),
-	};
+  			headingElements.forEach((element, index) => {
+  				if (index === highlightedIndex) {
+  					element.classList.add('highlighted');
+  				} else {
+  					element.classList.remove('highlighted');
+  				}
+  			});
+  		});
+  	};
+  	const observerOptions = {
+  		rootMargin: '0px 0px -50%',
+  		threshold: [...Array(100)].map((_, index) => index / 100),
+  	};
 
-	headings
-		.map((heading) => document.querySelector(`#${heading}`))
-		.filter((element) => element != null)
-		.forEach((element) => {
-			const observer = new IntersectionObserver(observerCallback, observerOptions);
-			observer.observe(element);
-		});
+  	headings
+  		.map((heading) => document.querySelector(`#${heading}`))
+  		.filter((element): element is Element => element != null)
+  		.forEach((element) => {
+  			const observer = new IntersectionObserver(observerCallback, observerOptions);
+  			observer.observe(element);
+  		});
+  });
 </script>
 <aside id="toc">
 	<ul>
