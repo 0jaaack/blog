@@ -4,6 +4,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import TimeStamp from '../../components/TimeStamp.astro';
 import undo from '../../assets/undo.svg?raw';
 import ThemeButton from '../../components/ThemeButton';
+import InteractiveToc from '../../components/InteractiveToc.astro';
 
 type Props = CollectionEntry<'essays'>;
 
@@ -16,7 +17,8 @@ export async function getStaticPaths() {
 }
 
 const essay = Astro.props;
-const { Content } = await essay.render();
+const { Content, headings } = await essay.render();
+const headingsWithoutFootnotes = headings.filter((heading) => heading.text !== 'Footnotes');
 ---
 
 <html lang="ko">
@@ -28,22 +30,36 @@ const { Content } = await essay.render();
 		/>
 	</head>
 	<body>
-		<main>
-			<div class="button-collection">
-				<a href="/" class="icon-button">
-					<Fragment set:html={undo} />
-				</a>
-				<ThemeButton client:only="preact" />
-			</div>
-			<article>
-				<TimeStamp date={essay.data.publishedDate} />
-				<h1>{essay.data.title}</h1>
-				<Content />
-			</article>
-		</main>
+		<div class="container">
+			<main>
+				<div class="button-collection">
+					<a href="/" class="icon-button">
+						<Fragment set:html={undo} />
+					</a>
+					<ThemeButton client:only="preact" />
+				</div>
+				<article>
+					<TimeStamp date={essay.data.publishedDate} />
+					<h1>{essay.data.title}</h1>
+					<Content />
+				</article>
+			</main>
+			<InteractiveToc headings={headingsWithoutFootnotes} />
+		</div>
 	</body>
 </html>
 <style is:global>
+	.container {
+		display: flex;
+		max-width: 624px;
+		margin: 0 auto;
+	}
+
+	main {
+		width: 100%;
+	  padding: 60px 24px;
+	}
+
 	article {
 		color: var(--color-secondary);
 	}
