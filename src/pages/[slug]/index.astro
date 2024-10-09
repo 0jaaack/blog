@@ -16,7 +16,8 @@ export async function getStaticPaths() {
 }
 
 const essay = Astro.props;
-const { Content } = await essay.render();
+const { Content, headings } = await essay.render();
+const headingsWithoutFootnotes = headings.filter((heading) => heading.text !== 'Footnotes');
 ---
 
 <html lang="ko">
@@ -28,22 +29,90 @@ const { Content } = await essay.render();
 		/>
 	</head>
 	<body>
-		<main>
-			<div class="button-collection">
-				<a href="/" class="icon-button">
-					<Fragment set:html={undo} />
-				</a>
-				<ThemeButton client:only="preact" />
-			</div>
-			<article>
-				<TimeStamp date={essay.data.publishedDate} />
-				<h1>{essay.data.title}</h1>
-				<Content />
-			</article>
-		</main>
+		<div class="container">
+			<main>
+				<div class="button-collection">
+					<a href="/" class="icon-button">
+						<Fragment set:html={undo} />
+					</a>
+					<ThemeButton client:only="preact" />
+				</div>
+				<article>
+					<TimeStamp date={essay.data.publishedDate} />
+					<h1>{essay.data.title}</h1>
+					<Content />
+				</article>
+			</main>
+			<aside id="toc">
+				<ul>
+					{headingsWithoutFootnotes.map(heading => (
+						<li data-toc={heading.slug} class={`level-${heading.depth}`} />
+					))}
+				</ul>
+			</aside>
+		</div>
+		<script>
+			const tocElement = document.getElementById('toc');
+
+			if (tocElement == null) {
+				throw new Error('Table of contents element not found');
+			}
+
+			const headingElements = Array.from(tocElement.querySelectorAll('[data-toc]'));
+			const headings = headingElements.map((element) => (element as HTMLElement).dataset.toc);
+			let currentEntry: IntersectionObserverEntry | null = null;
+
+			const observerCallback: IntersectionObserverCallback = (entries) => {
+				entries.forEach((entry) => {
+					const { intersectionRatio, isIntersecting, target } = entry;
+
+					if (!isIntersecting) {
+						return;
+					}
+					if (currentEntry != null && currentEntry.intersectionRatio > intersectionRatio) {
+						return;
+					}
+
+					currentEntry = entry;
+
+					const highlightedIndex = headings.findIndex((heading) => heading === target.id);
+
+					headingElements.forEach((element, index) => {
+						if (index === highlightedIndex) {
+							element.classList.add('highlighted');
+						} else {
+							element.classList.remove('highlighted');
+						}
+					});
+				});
+			};
+			const observerOptions = {
+				rootMargin: '0px 0px -80%',
+				threshold: [...Array(100)].map((_, index) => index / 100),
+			};
+
+			headings
+				.map((heading) => document.querySelector(`#${heading}`))
+				.filter((element) => element != null)
+				.forEach((element) => {
+  				const observer = new IntersectionObserver(observerCallback, observerOptions);
+  				observer.observe(element);
+				});
+		</script>
 	</body>
 </html>
 <style is:global>
+	.container {
+		display: flex;
+		max-width: 624px;
+		margin: 0 auto;
+	}
+
+	main {
+		width: 100%;
+	  padding: 60px 24px;
+	}
+
 	article {
 		color: var(--color-secondary);
 	}
@@ -151,5 +220,42 @@ const { Content } = await essay.render();
 		justify-content: space-between;
 		align-items: center;
 		margin-block-end: 12px;
+	}
+
+	#toc {
+		position: sticky;
+		top: 150px;
+		width: 1px;
+		height: 1px;
+	}
+
+	#toc ul {
+		width: 60px;
+		padding: 20px;
+		cursor: pointer;
+		list-style-type: none;
+	}
+
+	#toc li {
+		height: 2px;
+		background-color: var(--color-quaternary);
+		border-radius: 2px;
+		margin-block-end: 16px;
+	}
+
+	#toc li.highlighted {
+		background-color: var(--color-primary);
+	}
+
+	#toc li.level-1 {
+		width: 24px;
+	}
+
+	#toc li.level-2 {
+		width: 20px;
+	}
+
+	#toc li.level-3 {
+		width: 16px;
 	}
 </style>
