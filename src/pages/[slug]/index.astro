@@ -45,8 +45,10 @@ const headingsWithoutFootnotes = headings.filter((heading) => heading.text !== '
 			</main>
 			<aside id="toc">
 				<ul>
-					{headingsWithoutFootnotes.map(heading => (
-						<li data-toc={heading.slug} class={`level-${heading.depth}`} />
+					{headingsWithoutFootnotes.map((heading) => (
+						<li data-toc={heading.slug} class={`level-${heading.depth}`}>
+							<a href={`#${heading.slug}`}>{heading.text}</a>
+						</li>
 					))}
 				</ul>
 			</aside>
@@ -58,7 +60,7 @@ const headingsWithoutFootnotes = headings.filter((heading) => heading.text !== '
 				throw new Error('Table of contents element not found');
 			}
 
-			const headingElements = Array.from(tocElement.querySelectorAll('[data-toc]'));
+			const headingElements = Array.from(tocElement.querySelectorAll('li[data-toc]'));
 			const headings = headingElements.map((element) => (element as HTMLElement).dataset.toc);
 			let currentEntry: IntersectionObserverEntry | null = null;
 
@@ -229,21 +231,33 @@ const headingsWithoutFootnotes = headings.filter((heading) => heading.text !== '
 		height: 1px;
 	}
 
+
+	@keyframes fadeIn {
+		from {
+			transform: translate(-5px);
+			opacity: 0;
+		}
+		to {
+			transform: translateX(0);
+			opacity: 1;
+		}
+	}
+
 	#toc ul {
-		width: 60px;
+		width: 76px;
 		padding: 20px;
 		cursor: pointer;
 		list-style-type: none;
 	}
 
-	#toc li {
+	#toc ul li {
 		height: 2px;
 		background-color: var(--color-quaternary);
-		border-radius: 2px;
 		margin-block-end: 16px;
+		margin-inline-start: auto;
 	}
 
-	#toc li.highlighted {
+	#toc ul li.highlighted {
 		background-color: var(--color-primary);
 	}
 
@@ -257,5 +271,51 @@ const headingsWithoutFootnotes = headings.filter((heading) => heading.text !== '
 
 	#toc li.level-3 {
 		width: 16px;
+	}
+
+	#toc li a {
+		display: none;
+		padding: 2px 6px;
+		font-size: 13px;
+		color: var(--color-quaternary);
+		border-radius: 2px;
+	}
+
+	#toc:hover ul li a:hover {
+		color: var(--color-secondary);
+		background-color: var(--foreground-color);
+	}
+
+	#toc:hover ul {
+		width: max-content;
+	}
+
+	#toc:hover ul li {
+		width: unset;
+		height: unset;
+		margin-block-end: 6px;
+		background-color: unset;
+		border-radius: 4px;
+	}
+
+	#toc:hover ul li.level-2 {
+		margin-inline-start: 10px;
+	}
+
+	#toc:hover ul li.level-3 {
+		margin-inline-start: 20px;
+	}
+
+	#toc:hover ul li.highlighted a {
+		color: var(--color-primary);
+	}
+
+	#toc:hover ul li a {
+		display: block;
+	}
+
+	#toc:hover ul {
+		animation: 0.5s ease fadeIn;
+		will-change: transform, opacity;
 	}
 </style>
