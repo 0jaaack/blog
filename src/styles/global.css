@@ -112,6 +112,8 @@ body.dark .astro-code span {
     "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  scroll-behavior: smooth;
+  scroll-padding-block-start: 150px;
 }
 
 :root::-webkit-scrollbar {
