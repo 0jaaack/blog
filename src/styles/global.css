@@ -118,12 +118,6 @@ body.dark .astro-code span {
   display: none;
 }
 
-main {
-  max-width: 624px;
-  margin: 0 auto;
-  padding: 60px 24px;
-}
-
 ol,
 ul {
   padding-inline-start: 20px;
