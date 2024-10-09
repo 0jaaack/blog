@@ -76,6 +76,12 @@ const { headings } = Astro.props;
 		}
 	}
 
+  @media (max-width: 480px) {
+    #toc {
+      display: none;
+    }
+  }
+
 	#toc {
 		position: sticky;
 		top: 150px;
