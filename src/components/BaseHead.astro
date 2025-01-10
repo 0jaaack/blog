@@ -2,6 +2,7 @@
 import { ViewTransitions } from 'astro:transitions';
 import '../styles/global.css';
 import type { CollectionEntry } from 'astro:content';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
 	title: string;
@@ -125,3 +126,6 @@ const postImageUrl = essay != null ? `${Astro.url}/${essay.slug}-og.png` : "";
   document.addEventListener("DOMContentLoaded", init);
   document.addEventListener("astro:after-swap", init);
 </script>
+
+<!-- Vercel Analytics -->
+<Analytics />
