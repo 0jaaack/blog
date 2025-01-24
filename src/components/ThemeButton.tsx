@@ -1,32 +1,44 @@
-import { useState } from "preact/hooks";
 import darkIcon from "../assets/dark.svg";
 import lightIcon from "../assets/light.svg";
+import { useSyncExternalStore } from "preact/compat";
 
 const DarkIcon = <img src={darkIcon.src} />;
 const LightIcon = <img src={lightIcon.src} />;
 
 export default function ThemeButton() {
-  const [theme, setTheme] = useState(() =>
-    document.body.classList.contains("dark") ? "dark" : "light"
+  const isDarkTheme = useSyncExternalStore(
+    (flush) => {
+      const mutationObserver = new MutationObserver((mutationsList) => {
+        mutationsList.forEach((mutation) => {
+          if (mutation.attributeName !== "class") {
+            return;
+          }
+
+          flush();
+        });
+      });
+      mutationObserver.observe(document.body, { attributes: true });
+
+      return () => {
+        mutationObserver.disconnect();
+      };
+    },
+    () => document.body.classList.contains("dark"),
   );
 
   const toggleTheme = () => {
-    const currentTheme = document.body.classList.contains("dark")
-      ? "dark"
-      : "light";
-    const theme = currentTheme === "light" ? "dark" : "light";
+    const currentTheme = isDarkTheme ? "dark" : "light";
+    const oppositeTheme = isDarkTheme ? "light" : "dark";
 
-    localStorage.setItem("theme", theme);
+    localStorage.setItem("theme", oppositeTheme);
 
     document.body.classList.remove(currentTheme);
-    document.body.classList.add(theme);
-
-    setTheme(theme);
+    document.body.classList.add(oppositeTheme);
   };
 
   return (
     <button class="icon-button" onClick={toggleTheme}>
-      {theme === "dark" ? DarkIcon : LightIcon}
+      {isDarkTheme ? DarkIcon : LightIcon}
     </button>
   );
 }
