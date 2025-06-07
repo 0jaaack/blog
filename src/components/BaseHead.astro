@@ -1,8 +1,8 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
-import '../styles/global.css';
 import type { CollectionEntry } from 'astro:content';
 import Analytics from '@vercel/analytics/astro';
+import GlobalStyles from '../styles/GlobalStyles.astro';
 
 interface Props {
 	title: string;
@@ -129,3 +129,6 @@ const postImageUrl = essay != null ? `${Astro.url}/${essay.slug}-og.png` : "";
 
 <!-- Vercel Analytics -->
 <Analytics />
+
+<!-- Global Styles -->
+<GlobalStyles />
