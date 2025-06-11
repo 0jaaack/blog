@@ -1,0 +1,23 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import BlogHeader from '../components/BlogHeader.astro';
+import BlogFooter from '../components/BlogFooter.astro';
+import { Content as AboutContent } from '../content/bio/about.mdx';
+
+export const STORAGE_URL_PREFIX = 'https://jaaack.dev';
+
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title="공재혁" description="공재혁 블로그" />
+	</head>
+	<body>
+    <main>
+      <BlogHeader />
+      <AboutContent />
+      <BlogFooter />
+    </main>
+  </body>
+</html>

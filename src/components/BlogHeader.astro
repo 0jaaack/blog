@@ -1,12 +1,13 @@
 ---
-import github from "../assets/github.svg?raw";
-import email from "../assets/email.svg?raw";
-import rss from "../assets/rss.svg?raw";
 import ThemeButton from "./ThemeButton.tsx";
+
+const { pathname } = Astro.url;
 ---
 <header>
-	<span>Jaaack</span>
+	<h1>Jaaack</h1>
 	<nav>
+		<a href="/" aria-current={pathname === '/' ? 'page' : 'false'}>posts</a>
+		<a href="/about" aria-current={pathname.startsWith('/about') ? 'page' : 'false'}>about</a>
 		<ThemeButton client:only="preact" />
 	</nav>
 </header>
@@ -14,10 +15,11 @@ import ThemeButton from "./ThemeButton.tsx";
 	header {
 		display: flex;
 		margin-block-end: 12px;
+		height: 40px;
 	}
 
-	span {
-		font-size: 24px;
+	h1 {
+		font-size: 28px;
 		font-weight: 700;
 		color: var(--color-primary);
 		user-select: none;
@@ -25,7 +27,19 @@ import ThemeButton from "./ThemeButton.tsx";
 
 	nav {
 		display: flex;
+		align-items: center;
 		gap: 12px;
 		margin-left: auto;
+	}
+
+	a {
+		background: none;
+		border: none;
+		color: var(--color-tertiary);
+		cursor: pointer;
+	}
+
+	a[aria-current="page"] {
+		color: var(--color-secondary);
 	}
 </style>
