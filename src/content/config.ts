@@ -8,4 +8,9 @@ const essays = defineCollection({
   }),
 });
 
-export const collections = { essays };
+const bio = defineCollection({
+  type: "content",
+  schema: z.object({}),
+});
+
+export const collections = { essays, bio };
