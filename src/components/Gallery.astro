@@ -1,0 +1,86 @@
+---
+import { randomBytes } from "node:crypto";
+
+interface Props {
+  images: {
+    src: string;
+    alt: string;
+  }[];
+}
+const { images } = Astro.props;
+const galleryId = randomBytes(4).toString("hex");
+---
+
+<swiper-container id={galleryId} init="false">
+ {images.map((image) => (
+   <swiper-slide>
+     <img src={image.src} alt={image.alt} loading="lazy" />
+   </swiper-slide>
+ ))}
+</swiper-container>
+<script>
+  import { register } from 'swiper/element/bundle';
+
+  const galleries = document.querySelectorAll('swiper-container');
+  const params = {
+    navigation: true,
+    loop: true,
+    grabCursor: true,
+    spaceBetween: 8,
+    slidesPerView: "auto",
+    centeredSlides: true,
+    injectStyles: [`
+      .swiper-button-prev,
+      .swiper-button-next {
+        width: 10%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        margin: 0;
+      }
+      .swiper-button-prev {
+        left: -2%;
+        mask-image: linear-gradient(to left, transparent, var(--foreground-color));
+        background-color: var(--foreground-color);
+      }
+      .swiper-button-next {
+        right: -2%;
+        mask-image: linear-gradient(to right, transparent, var(--foreground-color));
+        background-color: var(--foreground-color);
+      }
+      :is(.swiper-button-prev, .swiper-button-next) svg {
+        display: none;
+      }
+    `]
+  };
+
+  register();
+
+  galleries.forEach(gallery => {
+    Object.assign(gallery, params);
+    gallery.initialize();
+  });
+</script>
+<style>
+  swiper-container {
+    width: 100%;
+    margin-top: 52px;
+    margin-bottom: 16px;
+    opacity: 0.9;
+  }
+
+  swiper-slide {
+    width: 80%;
+    margin: auto 0;
+  }
+
+  swiper-slide img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  .swiper-slide-active img {
+    border: 4px solid var(--foreground-color);
+  }
+</style>
