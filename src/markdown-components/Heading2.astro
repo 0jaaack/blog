@@ -1,0 +1,17 @@
+---
+const props = Astro.props;
+---
+
+<h2 {...props}>
+  <slot />
+</h2>
+<style>
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-block-start: 36px;
+    margin-block-end: 6px;
+    color: var(--color-secondary);
+  }
+</style>

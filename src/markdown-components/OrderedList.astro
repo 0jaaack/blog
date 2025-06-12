@@ -1,0 +1,15 @@
+---
+const props = Astro.props;
+---
+
+<ol {...props}>
+  <slot />
+</ol>
+<style>
+  ol {
+    margin-block: 8px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-secondary);
+  }
+</style>
