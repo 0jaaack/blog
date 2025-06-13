@@ -21,7 +21,6 @@ const galleryId = randomBytes(4).toString("hex");
 <script>
   import { register } from 'swiper/element/bundle';
 
-  const galleries = document.querySelectorAll('swiper-container');
   const params = {
     navigation: true,
     loop: true,
@@ -54,12 +53,17 @@ const galleryId = randomBytes(4).toString("hex");
     `]
   };
 
-  register();
+  function init() {
+    document.querySelectorAll('swiper-container').forEach(gallery => {
+      Object.assign(gallery, params);
+      gallery.initialize();
+    });
+  }
 
-  galleries.forEach(gallery => {
-    Object.assign(gallery, params);
-    gallery.initialize();
-  });
+  register();
+  init();
+
+  document.addEventListener("astro:after-swap", init);
 </script>
 <style>
   swiper-container {
