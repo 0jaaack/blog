@@ -48,7 +48,7 @@ const Z_INDEX = {
 
 z-index는 그 값보다 element의 구조에 영향을 받는 경우가 많다. 단순히 값으로만 z축을 제어하는 것은 불가능하다. 그러면 어떻게 동적인 요소들의 z축 위계를 관리할 수 있을까? 나는 세 가지 정도를 생각해보았다.
 
-1. HTML의 구조를 가진 z-index 구조 갖기
+### HTML의 구조를 가진 z-index 구조 갖기
 
 ```jsx
 const Z_INDEX = {
@@ -60,7 +60,7 @@ const Z_INDEX = {
 z-index가 HTML 구조의 한계에 부딪힌다면 반대로 HTML 구조에 맞게 바꿔줄 수 있다. z-index가 축소판 HTML 같은 역할을 하는 것이다. 꽤 그럴듯한 생각이지만 정답이라고 할 수는 없다. 왜냐하면 z-index 구조를 HTML에 맞게 관리해주는건 힘든 일이다. 기능이 추가되고 새로운 UI가 추가될 수록 그에 맞게 적절한 z-index 구조를 갖추는 건, 개발 세계에서 너무나 팔자좋은 일이기 때문에 좋은 방법은 아닌 것 같다.
 
 
-2. Stacking Context를 형성하지 않기
+### Stacking Context를 형성하지 않기
 
 불필요하게 Stacking Context를 형성하지 않으면 z-index가 무시될 일이 없다. 불필요하게 Stacking Context를 발생시키지만 않으면 하나의 Stacking Context안에 위치하게 되므로 z-index 위계를 쉽게 관리할 수 도 있다.
 
@@ -68,7 +68,7 @@ z-index가 HTML 구조의 한계에 부딪힌다면 반대로 HTML 구조에 맞
 
 또 Stacking Context를 형성하는 속성을 쓰지 않기도 힘든 일이다. Stacking Context는 `opacity`, `transform`, `will-change` 등을 적용하면 생기기도 한다. 필수적인 속성은 아니지만 이들 없이 작성하는 것은 가끔 상당히 피곤하다.
 
-3. 속박과 굴레에서 벗어나기
+### 속박과 굴레에서 벗어나기
 
 세 번째 아이디어는 아예 Context의 영향을 받지 않는 곳으로 보내버리는 전략이다. `body` 의 자식 요소에 렌더링시켜 다 같은 위계 안에서 우선순위를 정하는 것이다. 보통 웹을 렌더링할 수 있는 라이브러리에는 요소의 위치를 지정할 수 있는 옵션이 있는데, 대표적으로 react의 portal이 있다.[^2] 또 Mui, CodeMirror와 같은 라이브러리에서는 플러그인으로 특정 UI 요소의 렌더링 위치를 정할 수 있다.
 
