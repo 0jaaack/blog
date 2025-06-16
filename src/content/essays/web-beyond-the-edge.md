@@ -1,5 +1,5 @@
 ---
-title: Web beyond the edge
+title: 발표 - Web beyond the edge
 publishedDate: Nov 20 2024
 slug: web-beyond-the-edge
 ---

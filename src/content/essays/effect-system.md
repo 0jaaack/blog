@@ -1,5 +1,5 @@
 ---
-title: Effect System으로 효과적인 프로그램을 만들기
+title: 발표 - Effect System으로 효과적인 프로그램을 만들기
 publishedDate: Sep 29 2024
 slug: effect-system
 ---
