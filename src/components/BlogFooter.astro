@@ -2,22 +2,86 @@
 import github from "../assets/github.svg?raw";
 import email from "../assets/email.svg?raw";
 import rss from "../assets/rss.svg?raw";
+import telescope from "../assets/telescope.svg?raw";
 ---
-
+<div class="divider" />
 <footer>
-  <a href="/rss.xml" class="icon-button">
-    <Fragment set:html={rss} />
+  <a href="/about" class="icon-button" data-tooltip="about-tooltip">
+    <Fragment set:html={telescope} />
   </a>
-  <a href="https://github.com/0jaaack" class="icon-button" target="_blank" rel="noopener noreferrer">
+  <div popover id="about-tooltip" class="tooltip">소개</div>
+
+  <a href="https://github.com/0jaaack" class="icon-button" target="_blank" rel="noopener noreferrer" data-tooltip="github-tooltip">
     <Fragment set:html={github} />
   </a>
-  <a href="mailto:ruud091@gmail.com" class="icon-button">
+  <div popover id="github-tooltip" class="tooltip">GitHub</div>
+
+  <a href="mailto:ruud091@gmail.com" class="icon-button" data-tooltip="email-tooltip">
     <Fragment set:html={email} />
   </a>
+  <div popover id="email-tooltip" class="tooltip">이메일</div>
+
+  <a href="/rss.xml" class="icon-button" data-tooltip="rss-tooltip">
+    <Fragment set:html={rss} />
+  </a>
+  <div popover id="rss-tooltip" class="tooltip">RSS 피드</div>
 </footer>
+<script>
+  function init() {
+    document.querySelectorAll('[data-tooltip]').forEach(button => {
+      const tooltipId = button.getAttribute('data-tooltip');
+      if (tooltipId == null) return;
+      const tooltip = document.getElementById(tooltipId);
+      if (tooltip == null) return;
+
+      button.addEventListener('mouseenter', () => {
+        const TOOLTIP_MARGIN = 4;
+        const { left: buttonLeft, width: buttonWidth, top: buttonTop } = button.getBoundingClientRect();
+
+        tooltip.style.cssText = `
+          position: fixed;
+          top: ${buttonTop - TOOLTIP_MARGIN}px;
+          left: ${buttonLeft + buttonWidth / 2}px;
+          transform: translate(-50%, -100%);
+        `;
+
+        tooltip.showPopover();
+      });
+
+      button.addEventListener('mouseleave', () => {
+        tooltip.hidePopover();
+      });
+    });
+  }
+
+  init();
+  document.addEventListener("astro:after-swap", init);
+</script>
+
 <style>
+  .divider {
+    width: 100%;
+    height: 1px;
+    margin-top: 36px;
+    background-color: var(--color-quaternary);
+  }
+
   footer {
-    padding-block: 16px;
+    padding-block: 12px;
     color: var(--color-tertiary);
+    position: relative;
+  }
+
+  .tooltip {
+    padding: 4px 8px;
+    background: var(--foreground-color);
+    color: var(--color-primary);
+    font-size: 12px;
+    border: none;
+    border-radius: 2px;
+  }
+
+  .tooltip::backdrop {
+    background: transparent;
   }
 </style>
