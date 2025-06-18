@@ -15,10 +15,12 @@ export const STORAGE_URL_PREFIX = 'https://jaaack.dev';
 		<BaseHead title="공재혁" description="공재혁 블로그" />
 	</head>
 	<body>
-    <main>
-      <BlogHeader />
-      <AboutContent components={components} />
-      <BlogFooter />
-    </main>
+    <div id="root">
+      <main>
+        <BlogHeader />
+        <AboutContent components={components} />
+        <BlogFooter />
+      </main>
+    </div>
   </body>
 </html>

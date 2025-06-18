@@ -2,49 +2,69 @@
 import { randomBytes } from "node:crypto";
 
 interface Props {
-  images: {
+  images?: {
     src: string;
     alt: string;
   }[];
+  videos?: {
+    src: string;
+    poster: string;
+  }[];
 }
-const { images } = Astro.props;
+const { images = [], videos = [] } = Astro.props;
 const galleryId = randomBytes(4).toString("hex");
 ---
 
 <swiper-container id={galleryId} init="false">
- {images.map((image) => (
-   <swiper-slide>
-     <img src={image.src} alt={image.alt} loading="lazy" />
-   </swiper-slide>
- ))}
+  {videos.map((video) => (
+    <swiper-slide>
+      <img src={video.poster} loading="lazy" />
+    </swiper-slide>
+  ))}
+  {images.map((image) => (
+    <swiper-slide>
+      <img src={image.src} alt={image.alt} loading="lazy" />
+    </swiper-slide>
+  ))}
 </swiper-container>
-<div popover="manual">
+<dialog>
+  {videos.map((video) => (
+    <video src={video.src} poster={video.poster} autoplay muted controls playsinline aria-hidden="true" />
+  ))}
   {images.map((image) => (
     <img src={image.src} alt={image.alt} loading="lazy" aria-hidden="true" />
   ))}
-</div>
+</dialog>
 <script>
   import { register } from 'swiper/element/bundle';
 
-  const setCurrentImage = (() => {
-    let currentImage: string | null = null;
+  const setCurrentSource = (() => {
+    let currentSource: string | null = null;
 
     return (src: string | null) => {
-      if ((currentImage != null && src != null) || (src == null && currentImage == null)) return;
-      const popover = document.querySelector(`div[popover]:has(img[src="${src ?? currentImage}"])`);
-      if (!(popover instanceof HTMLElement)) return;
+      const dialog = document.querySelector(`dialog:has([src="${src ?? currentSource}"])`) ?? document.querySelector(`dialog:has([poster="${src ?? currentSource}"])`);
+      if (!(dialog instanceof HTMLDialogElement)) return;
 
-      currentImage = src;
+      currentSource = src;
 
-      popover.querySelectorAll('img').forEach((img) => {
-        const isCurrent = img.src === src;
-        img.setAttribute('aria-hidden', isCurrent ? 'false' : 'true');
+      dialog.querySelectorAll('img, video').forEach((element: Element) => {
+        if (!(element instanceof HTMLImageElement || element instanceof HTMLVideoElement)) return;
+        const isCurrent = element.src === src || (element instanceof HTMLVideoElement && element.poster === src);
+        element.setAttribute('aria-hidden', isCurrent ? 'false' : 'true');
       });
 
+      const handleBackdropClick = (event: MouseEvent) => {
+        if (event.target === dialog) {
+          dialog.close();
+          dialog.removeEventListener('click', handleBackdropClick);
+        }
+      };
+
       if (src == null) {
-        popover.hidePopover();
+        dialog.close();
       } else {
-        popover.showPopover();
+        dialog.showModal();
+        dialog.addEventListener('click', handleBackdropClick);
       }
     };
   })();
@@ -58,10 +78,10 @@ const galleryId = randomBytes(4).toString("hex");
     centeredSlides: true,
     on: {
       click: (_: unknown, event: MouseEvent) => {
-        if (!(event.target instanceof HTMLImageElement)) {
+        if (!(event.target instanceof HTMLImageElement || event.target instanceof HTMLVideoElement)) {
           return;
         }
-        setCurrentImage(event.target.src);
+        setCurrentSource(event.target.src);
       }
     },
     injectStyles: [`
@@ -100,7 +120,6 @@ const galleryId = randomBytes(4).toString("hex");
   init();
 
   document.addEventListener("astro:after-swap", init);
-  document.addEventListener("mouseup", () => setCurrentImage(null));
 </script>
 <style>
   swiper-container {
@@ -117,6 +136,7 @@ const galleryId = randomBytes(4).toString("hex");
 
   swiper-slide img {
     width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 10px;
   }
@@ -125,27 +145,39 @@ const galleryId = randomBytes(4).toString("hex");
     border: 1px solid var(--foreground-color);
   }
 
-  div[popover] {
-    max-width: 800px;
+  dialog {
+    max-width: min(800px, calc(100vw - 16px));
     margin: auto;
-    padding-inline: 8px;
-    background: transparent;
+    padding: 6px;
+    background: #e3e3e3;
     border: none;
+    outline: none;
   }
 
-  div[popover]::backdrop {
-    backdrop-filter: brightness(40%);
+  dialog :is(img, video) {
+    outline: none;
   }
 
-  div[popover] img[aria-hidden="true"] {
+  dialog button[aria-label="Close"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 8px;
+    color: #000000;
+    outline: none;
+  }
+
+  dialog::backdrop {
+    backdrop-filter: brightness(20%);
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  dialog [aria-hidden="true"] {
     display: none;
   }
 
-  :root:has(div[popover]:popover-open) {
+  :root:has(dialog[open]) #root {
     overflow: hidden;
-  }
-
-  :root:has(div[popover]:popover-open) swiper-container {
-    pointer-events: none;
   }
 </style>

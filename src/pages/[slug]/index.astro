@@ -30,7 +30,7 @@ const headingsWithoutFootnotes = headings.filter((heading) => heading.text !== '
 		/>
 	</head>
 	<body>
-		<div class="container">
+		<div id="root">
 			<main>
 				<div class="button-collection">
 					<a href="/" class="icon-button">
@@ -49,12 +49,6 @@ const headingsWithoutFootnotes = headings.filter((heading) => heading.text !== '
 	</body>
 </html>
 <style is:global>
-	.container {
-		display: flex;
-		max-width: 624px;
-		margin: 0 auto;
-	}
-
 	main {
 		width: 100%;
 	  padding: 60px 24px;
