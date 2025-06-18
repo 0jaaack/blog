@@ -10,11 +10,17 @@ export const STORAGE_URL_PREFIX = 'https://cdn.jaaack.dev';
 <Gallery
   videos={[
     {
-      src: "https://cdn.gcp.hopsoffice.com/landing-videos/hero.mp4",
+      src: [
+        "https://cdn.gcp.hopsoffice.com/landing-videos/hero.webm",
+        "https://cdn.gcp.hopsoffice.com/landing-videos/hero.mp4",
+      ],
       poster: "https://cdn.gcp.hopsoffice.com/landing-videos/hero_poster.webp",
     },
     {
-      src: "https://cdn.gcp.hopsoffice.com/tech-support/aiedit.webm",
+      src: [
+        STORAGE_URL_PREFIX + "/aigen.mp4",
+        "https://cdn.gcp.hopsoffice.com/tech-support/aigen.webm",
+      ],
       poster: "https://cdn.gcp.hopsoffice.com/tech-support/aigen_poster.webp",
     },
   ]}
