@@ -84,21 +84,25 @@
     font-size: 15px;
     line-height: 1.5;
     color: var(--color-primary);
+  }
+
+
+  #root {
+    position: relative;
+    height: 100vh;
+    height: 100dvh;
+    overflow: auto;
+    isolation: isolate;
     -ms-overflow-style: none;
     scrollbar-width: none;
     scroll-behavior: smooth;
-    scroll-padding-block-start: 150px;
-  }
+    scroll-padding-block-start: 100px;
+	}
 
-  :root::-webkit-scrollbar {
+
+  #root::-webkit-scrollbar {
     display: none;
   }
-
-  #root,
-  #__next {
-    isolation: isolate;
-  }
-
 
   body {
     background-color: #f9f9f9;
