@@ -19,12 +19,16 @@
     "astro": "^4.5.18",
     "mime-types": "^3.0.1",
     "preact": "^10.20.2",
+    "remark": "^15.0.1",
     "satori": "^0.10.13",
     "sharp": "^0.33.0",
+    "strip-markdown": "^6.0.0",
     "swiper": "^11.2.8",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "unist-util-remove": "^4.0.0"
   },
   "devDependencies": {
+    "@types/mdast": "^4.0.4",
     "@types/mime-types": "^3.0.1"
   }
 }

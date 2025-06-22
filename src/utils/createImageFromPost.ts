@@ -25,7 +25,7 @@ export async function getSVGImageFromComponent(component: JSX.Element) {
 }
 
 export const getPNGImageFromPost = async (essay: Essay): Promise<Buffer> => {
-  const component = PostOpenGraphImage(essay);
+  const component = await PostOpenGraphImage(essay);
   const SVG = await getSVGImageFromComponent(component);
 
   return await sharp(Buffer.from(SVG)).png().toBuffer();

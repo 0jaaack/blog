@@ -1,7 +1,35 @@
 import type { JSX } from "preact/jsx-runtime";
 import type { Essay } from "../pages/[slug]/[slug]-og.png";
+import type { Root } from 'mdast';
+import { remark } from 'remark';
+import remarkMdx from 'remark-mdx';
+import stripMarkdown from 'strip-markdown';
+import { remove } from 'unist-util-remove';
 
-export function PostOpenGraphImage(essay: Essay): JSX.Element {
+export async function extractTextFromMDX(mdxString: string): Promise<string> {
+  const removeImports = () => (tree: Root) => {
+    remove(tree, 'mdxjsEsm');
+    remove(tree, 'import');
+  };
+  const removeFootnotes = () => (tree: Root) => {
+    remove(tree, 'linkReference');
+    remove(tree, 'definition');
+  };
+  const processor = remark()
+    .use(remarkMdx)
+    .use(removeImports)
+    .use(removeFootnotes)
+    .use(stripMarkdown);
+
+  const result = await processor.process(mdxString);
+  return String(result);
+}
+
+export async function PostOpenGraphImage(
+  essay: Essay
+): Promise<JSX.Element> {
+  const bodyText = await extractTextFromMDX(essay.body);
+
   return (
     <main
       style={{
@@ -31,7 +59,7 @@ export function PostOpenGraphImage(essay: Essay): JSX.Element {
           maxHeight: "9em",
         }}
       >
-        {essay.body}
+        {bodyText}
       </p>
     </main>
   );
