@@ -113,7 +113,7 @@
     padding: 60px 24px 24px;
 	}
 
-  body {
+  :root {
     background-color: #f9f9f9;
 
     --foreground-color: #f2f2f2;
@@ -123,7 +123,7 @@
     --color-quaternary: #868e96;
   }
 
-  body.dark {
+  :root.dark {
     background-color: #131414;
 
     --foreground-color: #192020;
@@ -133,8 +133,8 @@
     --color-quaternary: #495057;
   }
 
-  body.dark .astro-code,
-  body.dark .astro-code span {
+  :root.dark .astro-code,
+  :root.dark .astro-code span {
     color: var(--shiki-dark) !important;
   }
 
@@ -156,7 +156,7 @@
     background-color: #f1f3f5;
   }
 
-  body.dark .icon-button:hover {
+  :root.dark .icon-button:hover {
     background-color: #212529;
   }
 </style>

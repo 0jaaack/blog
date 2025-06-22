@@ -17,13 +17,13 @@ export default function ThemeButton() {
           flush();
         });
       });
-      mutationObserver.observe(document.body, { attributes: true });
+      mutationObserver.observe(document.documentElement, { attributes: true });
 
       return () => {
         mutationObserver.disconnect();
       };
     },
-    () => document.body.classList.contains("dark"),
+    () => document.documentElement.classList.contains("dark"),
   );
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
@@ -33,8 +33,8 @@ export default function ThemeButton() {
 
     localStorage.setItem("theme", oppositeTheme);
 
-    document.body.classList.remove(currentTheme);
-    document.body.classList.add(oppositeTheme);
+    document.documentElement.classList.remove(currentTheme);
+    document.documentElement.classList.add(oppositeTheme);
   };
 
   const showTooltip = () => {

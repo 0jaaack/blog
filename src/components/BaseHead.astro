@@ -111,19 +111,19 @@ const postImageUrl = essay != null ? `${Astro.url}${essay.slug}-og.png` : "";
 />
 
 <!-- Theme -->
-<script>
+<script is:inline>
   function init() {
     const isDark = localStorage.getItem("theme") !== 'light'
       || window.matchMedia("(prefers-color-scheme: light)").matches;
 
     if (isDark) {
-      document.body.classList.add("dark");
+      document.documentElement.classList.add("dark");
     } else {
-      document.body.classList.remove("dark");
+      document.documentElement.classList.remove("dark");
     }
   }
 
-  document.addEventListener("DOMContentLoaded", init);
+  init();
   document.addEventListener("astro:after-swap", init);
 </script>
 
