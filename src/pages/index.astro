@@ -15,29 +15,25 @@ const essays = await getCollection('essays')
 		<BaseHead title="jaaack.dev" description="공재혁 블로그" />
 	</head>
 	<body>
-		<main>
-			<BlogHeader />
-			<ul>
-				{essays.map((essay) => (
-					<li>
-						<a href={`/${essay.slug}`}>
-							<span>{essay.data.title}</span>
-							<TimeStamp date={essay.data.publishedDate}/>
-						</a>
-					</li>
-				))}
-			</ul>
-			<BlogFooter />
-		</main>
+		<div id="root">
+			<main>
+				<BlogHeader />
+				<ul>
+					{essays.map((essay) => (
+						<li>
+							<a href={`/${essay.slug}`}>
+								<span>{essay.data.title}</span>
+								<TimeStamp date={essay.data.publishedDate}/>
+							</a>
+						</li>
+					))}
+				</ul>
+				<BlogFooter />
+			</main>
+		</div>
 	</body>
 </html>
 <style is:global>
-	main {
-	  max-width: 624px;
-	  margin: 0 auto;
-	  padding: 60px 24px;
-	}
-
 	ul {
 		margin-block-start: 24px;
 		padding-inline-start: 0;

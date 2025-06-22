@@ -49,11 +49,6 @@ const headingsWithoutFootnotes = headings.filter((heading) => heading.text !== '
 	</body>
 </html>
 <style is:global>
-	main {
-		width: 100%;
-	  padding: 60px 24px;
-	}
-
 	article {
 		color: var(--color-secondary);
 	}
@@ -143,6 +138,10 @@ const headingsWithoutFootnotes = headings.filter((heading) => heading.text !== '
 
 	article .footnotes li {
 		margin-block-start: 12px;
+	}
+
+	article .footnotes p {
+		margin: 0;
 	}
 
 	h2.sr-only {
