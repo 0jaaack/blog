@@ -26,7 +26,9 @@ export async function extractTextFromMDX(mdxString: string): Promise<string> {
 }
 
 export async function PostOpenGraphImage(
-  essay: Essay
+  essay: Essay,
+  width: number,
+  height: number,
 ): Promise<JSX.Element> {
   const bodyText = await extractTextFromMDX(essay.body);
 
@@ -35,15 +37,16 @@ export async function PostOpenGraphImage(
       style={{
         display: "flex",
         flexDirection: "column",
-        padding: "24px 80px",
+        gap: "48px",
+        padding: "48px 80px 0",
         backgroundColor: "#ffffff",
+        width,
+        height,
       }}
     >
       <h1
         style={{
           fontSize: "64px",
-          margin: "88px 0",
-          marginLeft: "12px",
         }}
       >
         {essay.data.title}
@@ -56,7 +59,8 @@ export async function PostOpenGraphImage(
           overflow: "hidden",
           textOverflow: "ellipsis",
           lineHeight: "1.5em",
-          maxHeight: "9em",
+          minHeight: 0,
+          height: "100%",
         }}
       >
         {bodyText}

@@ -5,10 +5,13 @@ import sharp from "sharp";
 import { PostOpenGraphImage } from "../components/PostOpenGraphImage";
 import type { Essay } from "../pages/[slug]/[slug]-og.png";
 
+const IMAGE_WIDTH = 1200;
+const IMAGE_HEIGHT = 630;
+
 export async function getSVGImageFromComponent(component: JSX.Element) {
   return await satori(component, {
-    width: 1200,
-    height: 630,
+    width: IMAGE_WIDTH,
+    height: IMAGE_HEIGHT,
     fonts: [
       {
         name: "Pretendard",
@@ -25,7 +28,7 @@ export async function getSVGImageFromComponent(component: JSX.Element) {
 }
 
 export const getPNGImageFromPost = async (essay: Essay): Promise<Buffer> => {
-  const component = await PostOpenGraphImage(essay);
+  const component = await PostOpenGraphImage(essay, IMAGE_WIDTH, IMAGE_HEIGHT);
   const SVG = await getSVGImageFromComponent(component);
 
   return await sharp(Buffer.from(SVG)).png().toBuffer();
