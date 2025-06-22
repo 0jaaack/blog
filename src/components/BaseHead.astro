@@ -14,7 +14,7 @@ interface Props {
 const { title, description, essay } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const postImageUrl = essay != null ? `${Astro.url}/${essay.slug}-og.png` : "";
+const postImageUrl = essay != null ? `${Astro.url}${essay.slug}-og.png` : "";
 ---
 
 <!-- Global Metadata -->
