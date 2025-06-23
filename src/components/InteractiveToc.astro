@@ -121,6 +121,10 @@ const { headings } = Astro.props;
 		width: 16px;
 	}
 
+	#toc li.level-4 {
+		width: 12px;
+	}
+
 	#toc li a {
 		display: none;
 		padding: 4px 6px;
@@ -149,6 +153,10 @@ const { headings } = Astro.props;
 
 	#toc:hover ul li.level-3 {
 		margin-inline-start: 20px;
+	}
+
+	#toc:hover ul li.level-4 {
+		margin-inline-start: 30px;
 	}
 
   #toc:hover ul li a {

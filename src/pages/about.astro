@@ -2,10 +2,9 @@
 import BaseHead from '../components/BaseHead.astro';
 import BlogHeader from '../components/BlogHeader.astro';
 import BlogFooter from '../components/BlogFooter.astro';
-import { Content as AboutContent } from '../content/bio/about.mdx';
+import { Content as AboutContent, getHeadings } from '../content/bio/about.mdx';
 import components from '../markdown-components/components';
-
-export const STORAGE_URL_PREFIX = 'https://jaaack.dev';
+import InteractiveToc from '../components/InteractiveToc.astro';
 
 ---
 
@@ -21,6 +20,7 @@ export const STORAGE_URL_PREFIX = 'https://jaaack.dev';
         <AboutContent components={components} />
         <BlogFooter />
       </main>
+      <InteractiveToc headings={getHeadings()} />
     </div>
   </body>
 </html>
