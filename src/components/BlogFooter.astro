@@ -6,11 +6,6 @@ import telescope from "../assets/telescope.svg?raw";
 ---
 <div class="divider" />
 <footer>
-  <a href="/about" class="icon-button" data-tooltip="about-tooltip">
-    <Fragment set:html={telescope} />
-  </a>
-  <div popover id="about-tooltip" class="tooltip">소개</div>
-
   <a href="https://github.com/0jaaack" class="icon-button" target="_blank" rel="noopener noreferrer" data-tooltip="github-tooltip">
     <Fragment set:html={github} />
   </a>
@@ -59,7 +54,7 @@ import telescope from "../assets/telescope.svg?raw";
 </script>
 
 <style>
-  .divider {
+    .divider {
     width: 100%;
     height: 1px;
     margin-top: 36px;

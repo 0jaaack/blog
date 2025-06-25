@@ -1,5 +1,7 @@
 ---
 import ThemeButton from "./ThemeButton.tsx";
+
+const { pathname } = Astro.url;
 ---
 <header>
 	<h1>
@@ -8,6 +10,12 @@ import ThemeButton from "./ThemeButton.tsx";
 		</a>
 	</h1>
 	<nav>
+		<a href="/" target="_self" rel="noopener noreferrer" aria-current={pathname === "/" ? "page" : undefined}>
+			posts
+		</a>
+		<a href="/about" target="_self" rel="noopener noreferrer" aria-current={pathname.startsWith("/about") ? "page" : undefined}>
+			about
+		</a>
 		<ThemeButton client:only="preact" />
 	</nav>
 </header>
@@ -30,5 +38,13 @@ import ThemeButton from "./ThemeButton.tsx";
 		align-items: center;
 		gap: 12px;
 		margin-left: auto;
+	}
+
+	nav a {
+		color: var(--color-tertiary);
+	}
+
+	nav a[aria-current="page"] {
+		color: var(--color-secondary);
 	}
 </style>
