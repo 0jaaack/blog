@@ -20,18 +20,18 @@ const galleryId = randomBytes(4).toString("hex");
 <swiper-container id={galleryId} init="false">
   {videos.map((video) => (
     <swiper-slide>
-      <Image src={video.poster} alt="" width={1280} height={720} />
+      <Image src={video.poster} alt="" width={1280} height={720} data-src={video.poster} />
     </swiper-slide>
   ))}
   {images.map((image) => (
     <swiper-slide>
-      <Image src={image.src} alt={image.alt} width={1280} height={720} />
+      <Image src={image.src} alt={image.alt} width={1280} height={720} data-src={image.src} />
     </swiper-slide>
   ))}
 </swiper-container>
 <dialog id={`dialog-${galleryId}`}>
   {videos.map((video) => (
-    <video poster={video.poster} autoplay muted controls playsinline aria-hidden="true">
+    <video poster={video.poster} autoplay muted controls playsinline aria-hidden="true" data-src={video.poster}>
       {video.src.map((src) => {
         const type = mime.lookup(src);
         if (type === false) return null;
@@ -40,7 +40,7 @@ const galleryId = randomBytes(4).toString("hex");
     </video>
   ))}
   {images.map((image) => (
-    <Image src={image.src} alt={image.alt} width={1280} height={720} aria-hidden="true" />
+    <Image src={image.src} alt={image.alt} width={1280} height={720} aria-hidden="true" loading="lazy" data-src={image.src} />
   ))}
 </dialog>
 <script>
@@ -50,14 +50,13 @@ const galleryId = randomBytes(4).toString("hex");
     let currentSource: string | null = null;
 
     return (src: string | null) => {
-      const dialog = document.querySelector(`dialog:has([src="${src ?? currentSource}"])`) ?? document.querySelector(`dialog:has([poster="${src ?? currentSource}"])`);
+      const dialog = document.querySelector(`dialog:has([data-src="${src ?? currentSource}"])`);
       if (!(dialog instanceof HTMLDialogElement)) return;
-
       currentSource = src;
 
       dialog.querySelectorAll('img, video').forEach((element: Element) => {
-        if (!(element instanceof HTMLImageElement || element instanceof HTMLVideoElement)) return;
-        const isCurrent = element.src === src || (element instanceof HTMLVideoElement && element.poster === src);
+        if (!(element instanceof HTMLElement)) return;
+        const isCurrent = element.dataset.src === src;
         element.setAttribute('aria-hidden', isCurrent ? 'false' : 'true');
       });
 
@@ -89,7 +88,7 @@ const galleryId = randomBytes(4).toString("hex");
         if (!(event.target instanceof HTMLImageElement || event.target instanceof HTMLVideoElement)) {
           return;
         }
-        setCurrentSource(event.target.src);
+        setCurrentSource(event.target.dataset.src ?? null);
       }
     },
     injectStyles: [`
@@ -184,6 +183,10 @@ const galleryId = randomBytes(4).toString("hex");
 
   dialog [aria-hidden="true"] {
     display: none;
+  }
+
+  dialog img {
+    height: auto;
   }
 
   :root:has(dialog[open]) #root {
