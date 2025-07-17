@@ -14,5 +14,10 @@ export default defineConfig({
         light: 'github-light',
       },
     },
-  }
+  },
+  image: {
+    domains: ["cdn.jaaack.dev", "cdn.gcp.hopsoffice.com"],
+    remotePatterns: [{ protocol: "https" }],
+    responsiveStyles: true,
+  },
 });

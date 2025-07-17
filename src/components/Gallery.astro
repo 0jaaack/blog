@@ -1,6 +1,7 @@
 ---
 import { randomBytes } from "node:crypto";
 import mime from "mime-types";
+import { Image } from "astro:assets";
 
 interface Props {
   images?: {
@@ -19,12 +20,12 @@ const galleryId = randomBytes(4).toString("hex");
 <swiper-container id={galleryId} init="false">
   {videos.map((video) => (
     <swiper-slide>
-      <img src={video.poster} alt="" loading="lazy" />
+      <Image src={video.poster} alt="" width={1280} height={720} />
     </swiper-slide>
   ))}
   {images.map((image) => (
     <swiper-slide>
-      <img src={image.src} alt={image.alt} loading="lazy" />
+      <Image src={image.src} alt={image.alt} width={1280} height={720} />
     </swiper-slide>
   ))}
 </swiper-container>
@@ -39,7 +40,7 @@ const galleryId = randomBytes(4).toString("hex");
     </video>
   ))}
   {images.map((image) => (
-    <img src={image.src} alt={image.alt} loading="lazy" aria-hidden="true" />
+    <Image src={image.src} alt={image.alt} width={1280} height={720} aria-hidden="true" />
   ))}
 </dialog>
 <script>
@@ -94,7 +95,7 @@ const galleryId = randomBytes(4).toString("hex");
     injectStyles: [`
       .swiper-button-prev,
       .swiper-button-next {
-        width: 10%;
+        width: 8%;
         height: 100%;
         position: absolute;
         top: 0;
@@ -137,8 +138,9 @@ const galleryId = randomBytes(4).toString("hex");
   }
 
   swiper-slide {
-    width: 80%;
+    width: 90%;
     margin: auto 0;
+    aspect-ratio: 1280 / 720;
   }
 
   swiper-slide img {
