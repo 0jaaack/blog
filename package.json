@@ -18,7 +18,6 @@
     "@astrojs/sitemap": "^3.4.1",
     "@vercel/analytics": "^1.4.1",
     "astro": "^5.11.2",
-    "mime-types": "^3.0.1",
     "preact": "^10.20.2",
     "remark": "^15.0.1",
     "satori": "^0.10.13",

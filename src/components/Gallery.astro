@@ -1,6 +1,5 @@
 ---
 import { randomBytes } from "node:crypto";
-import mime from "mime-types";
 import { Image } from "astro:assets";
 
 interface Props {
@@ -32,11 +31,9 @@ const galleryId = randomBytes(4).toString("hex");
 <dialog id={`dialog-${galleryId}`}>
   {videos.map((video) => (
     <video poster={video.poster} autoplay muted controls playsinline aria-hidden="true" data-src={video.poster}>
-      {video.src.map((src) => {
-        const type = mime.lookup(src);
-        if (type === false) return null;
-        return <source src={src} type={type} />;
-      })}
+      {video.src.map((src) => (
+        <source src={src} type={`video/${src.split('.').pop()}`} />
+      ))}
     </video>
   ))}
   {images.map((image) => (
