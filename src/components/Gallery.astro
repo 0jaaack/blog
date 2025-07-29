@@ -11,20 +11,23 @@ interface Props {
     src: string[];
     poster: string;
   }[];
+  screen?: 'video' | 'mobile';
 }
-const { images = [], videos = [] } = Astro.props;
+const { images = [], videos = [], screen = 'video' } = Astro.props;
 const galleryId = randomBytes(4).toString("hex");
+
+const imageProps = screen === 'video' ? { width: 1280, height: 720 } : { width: 720, height: 1280 };
 ---
 
-<swiper-container id={galleryId} init="false">
+<swiper-container id={galleryId} init="false" data-screen={screen}>
   {videos.map((video) => (
     <swiper-slide>
-      <Image src={video.poster} alt="" width={1280} height={720} data-src={video.poster} />
+      <Image src={video.poster} alt="" data-src={video.poster} {...imageProps} />
     </swiper-slide>
   ))}
   {images.map((image) => (
     <swiper-slide>
-      <Image src={image.src} alt={image.alt} width={1280} height={720} data-src={image.src} />
+      <Image src={image.src} alt={image.alt} data-src={image.src} {...imageProps} />
     </swiper-slide>
   ))}
 </swiper-container>
@@ -37,11 +40,11 @@ const galleryId = randomBytes(4).toString("hex");
     </video>
   ))}
   {images.map((image) => (
-    <Image src={image.src} alt={image.alt} width={1280} height={720} aria-hidden="true" loading="lazy" data-src={image.src} />
+    <Image src={image.src} alt={image.alt} aria-hidden="true" loading="lazy" data-src={image.src} {...imageProps} />
   ))}
 </dialog>
 <script>
-  import { register } from 'swiper/element/bundle';
+  import { register, type SwiperContainer } from 'swiper/element/bundle';
 
   const setCurrentSource = (() => {
     let currentSource: string | null = null;
@@ -73,49 +76,56 @@ const galleryId = randomBytes(4).toString("hex");
     };
   })();
 
-  const params = {
-    navigation: true,
-    loop: true,
-    grabCursor: true,
-    spaceBetween: 8,
-    slidesPerView: "auto",
-    centeredSlides: true,
-    on: {
-      click: (_: unknown, event: MouseEvent) => {
-        if (!(event.target instanceof HTMLImageElement || event.target instanceof HTMLVideoElement)) {
-          return;
+  function createParams(swiperContainer: SwiperContainer) {
+    const screen = swiperContainer.dataset.screen;
+    if (screen !== 'video' && screen !== 'mobile') {
+      throw new Error();
+    }
+
+    return {
+      navigation: true,
+      loop: true,
+      grabCursor: true,
+      spaceBetween: 8,
+      slidesPerView: screen === 'video' ? 1.1 : 3,
+      centeredSlides: true,
+      on: {
+        click: (_: unknown, event: MouseEvent) => {
+          if (!(event.target instanceof HTMLImageElement || event.target instanceof HTMLVideoElement)) {
+            return;
+          }
+          setCurrentSource(event.target.dataset.src ?? null);
         }
-        setCurrentSource(event.target.dataset.src ?? null);
-      }
-    },
-    injectStyles: [`
-      .swiper-button-prev,
-      .swiper-button-next {
-        width: 8%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        margin: 0;
-      }
-      .swiper-button-prev {
-        left: -2%;
-        mask-image: linear-gradient(to left, transparent, var(--foreground-color));
-        background-color: var(--foreground-color);
-      }
-      .swiper-button-next {
-        right: -2%;
-        mask-image: linear-gradient(to right, transparent, var(--foreground-color));
-        background-color: var(--foreground-color);
-      }
-      :is(.swiper-button-prev, .swiper-button-next) svg {
-        display: none;
-      }
-    `]
-  };
+      },
+      injectStyles: [`
+        .swiper-button-prev,
+        .swiper-button-next {
+          width: 8%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          margin: 0;
+        }
+        .swiper-button-prev {
+          left: -2%;
+          mask-image: linear-gradient(to left, transparent, var(--foreground-color));
+          background-color: var(--foreground-color);
+        }
+        .swiper-button-next {
+          right: -2%;
+          mask-image: linear-gradient(to right, transparent, var(--foreground-color));
+          background-color: var(--foreground-color);
+        }
+        :is(.swiper-button-prev, .swiper-button-next) svg {
+          display: none;
+        }
+      `]
+    };
+  }
 
   function init() {
     document.querySelectorAll('swiper-container').forEach(gallery => {
-      Object.assign(gallery, params);
+      Object.assign(gallery, createParams(gallery));
       gallery.initialize();
     });
   }
@@ -125,7 +135,12 @@ const galleryId = randomBytes(4).toString("hex");
 
   document.addEventListener("astro:after-swap", init);
 </script>
-<style>
+<style
+  define:vars={{ 
+    'slide-width': screen === 'video' ? '90%' : '33%', 
+    'slide-ratio': screen === 'video' ? '16 / 9' : '9 / 16'
+  }}
+>
   swiper-container {
     width: 100%;
     margin-top: 52px;
@@ -134,15 +149,15 @@ const galleryId = randomBytes(4).toString("hex");
   }
 
   swiper-slide {
-    width: 90%;
+    width: var(--slide-width);
     margin: auto 0;
-    aspect-ratio: 1280 / 720;
+    aspect-ratio: var(--slide-ratio);
   }
 
   swiper-slide img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     border-radius: 10px;
   }
 
