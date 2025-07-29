@@ -198,7 +198,7 @@ const imageProps = screen === 'video' ? { width: 1280, height: 720 } : { width: 
 
   dialog :is(img, video) {
     width: fit-content;
-    max-width: 800px;
+    max-width: min(800px, 90vw);
     height: fit-content;
     max-height: calc(100vh - 60px);
     object-fit: contain;
