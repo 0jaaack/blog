@@ -142,7 +142,7 @@ const galleryId = randomBytes(4).toString("hex");
   swiper-slide img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 10px;
   }
 
@@ -151,7 +151,6 @@ const galleryId = randomBytes(4).toString("hex");
   }
 
   dialog {
-    max-width: min(800px, calc(100vw - 16px));
     margin: auto;
     padding: 6px;
     background: #e3e3e3;
@@ -182,8 +181,12 @@ const galleryId = randomBytes(4).toString("hex");
     display: none;
   }
 
-  dialog img {
-    height: auto;
+  dialog :is(img, video) {
+    width: fit-content;
+    max-width: 800px;
+    height: fit-content;
+    max-height: calc(100vh - 60px);
+    object-fit: contain;
   }
 
   :root:has(dialog[open]) #root {
