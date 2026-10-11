@@ -19,7 +19,7 @@ export const GET: APIRoute = async function get({ props }) {
   const essay = props as Props;
   const png = await getPNGImageFromPost(essay);
 
-  return new Response(png, {
+  return new Response(new Uint8Array(png), {
     headers: {
       "Content-Type": "image/png",
     },
