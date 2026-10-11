@@ -30,7 +30,7 @@ export async function PostOpenGraphImage(
   width: number,
   height: number,
 ): Promise<JSX.Element> {
-  const bodyText = await extractTextFromMDX(essay.body);
+  const bodyText = await extractTextFromMDX(essay.body ?? "");
 
   return (
     <main

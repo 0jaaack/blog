@@ -10,7 +10,7 @@ export async function GET(context) {
     items: essays.map((essay) => ({
       title: essay.data.title,
       pubDate: essay.data.publishedDate,
-      link: `/${essay.slug}`,
+      link: `/${essay.id}`,
     })),
   });
 }

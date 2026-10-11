@@ -10,18 +10,19 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/cloudflare": "^12.6.0",
-    "@astrojs/mdx": "^4.3.0",
-    "@astrojs/preact": "^4.1.0",
-    "@astrojs/rss": "^4.0.12",
-    "@astrojs/sitemap": "^3.4.1",
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/cloudflare": "^14.3.4",
+    "@astrojs/mdx": "^8.0.3",
+    "@astrojs/preact": "^6.0.6",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
     "@vercel/analytics": "^1.4.1",
-    "astro": "^5.11.2",
+    "astro": "^7.3.8",
     "preact": "^10.20.2",
     "remark": "^15.0.1",
+    "remark-mdx": "^3.1.1",
     "satori": "^0.10.13",
-    "sharp": "^0.33.0",
+    "sharp": "^0.35.5",
     "strip-markdown": "^6.0.0",
     "swiper": "^11.2.8",
     "typescript": "^5.4.5",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@types/mdast": "^4.0.4",
-    "@types/mime-types": "^3.0.1"
+    "@types/mime-types": "^3.0.1",
+    "wrangler": "^4.149.0"
   }
 }

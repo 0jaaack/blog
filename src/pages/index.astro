@@ -21,7 +21,7 @@ const essays = await getCollection('essays')
 				<ul>
 					{essays.map((essay) => (
 						<li>
-							<a href={`/${essay.slug}`}>
+							<a href={`/${essay.id}`}>
 								<span>{essay.data.title}</span>
 								<TimeStamp date={essay.data.publishedDate}/>
 							</a>

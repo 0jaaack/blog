@@ -1,5 +1,5 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import TimeStamp from '../../components/TimeStamp.astro';
 import undo from '../../assets/undo.svg?raw';
@@ -11,13 +11,13 @@ type Props = CollectionEntry<'essays'>;
 export async function getStaticPaths() {
 	const essays = await getCollection('essays');
 	return essays.map((essay) => ({
-		params: { slug: essay.slug },
+		params: { slug: essay.id },
 		props: essay,
 	}));
 }
 
 const essay = Astro.props;
-const { Content, headings } = await essay.render();
+const { Content, headings } = await render(essay);
 const headingsWithoutFootnotes = headings.filter((heading) => heading.text !== 'Footnotes');
 ---
 

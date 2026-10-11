@@ -17,8 +17,10 @@ export default defineConfig({
     },
   },
   adapter: cloudflare({
-    imageService: "compile"
+    imageService: "compile",
+    prerenderEnvironment: "node",
   }),
+  session: false,
   image: {
     domains: ["cdn.jaaack.dev", "cdn.gcp.hopsoffice.com"],
     responsiveStyles: true,

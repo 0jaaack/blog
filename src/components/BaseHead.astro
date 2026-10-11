@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import type { CollectionEntry } from 'astro:content';
 import Analytics from '@vercel/analytics/astro';
 import GlobalStyles from '../styles/GlobalStyles.astro';
@@ -14,7 +14,7 @@ interface Props {
 const { title, description, essay } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const postImageUrl = essay != null ? `${Astro.url}${essay.slug}-og.png` : "";
+const postImageUrl = essay != null ? `${Astro.url}${essay.id}-og.png` : "";
 ---
 
 <!-- Global Metadata -->
@@ -92,7 +92,7 @@ const postImageUrl = essay != null ? `${Astro.url}${essay.slug}-og.png` : "";
 />
 
 <!-- Transitions -->
-<ViewTransitions />
+<ClientRouter />
 
 <!-- Preload Fonts -->
 <link
