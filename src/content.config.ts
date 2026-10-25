@@ -10,9 +10,4 @@ const essays = defineCollection({
   }),
 });
 
-const bio = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/bio" }),
-  schema: z.object({}),
-});
-
-export const collections = { essays, bio };
+export const collections = { essays };
