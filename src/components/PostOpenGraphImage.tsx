@@ -37,8 +37,8 @@ export async function PostOpenGraphImage(
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: "48px",
-        padding: "48px 80px 0",
+        gap: "64px",
+        padding: "70px 80px 0",
         backgroundColor: "#ffffff",
         width,
         height,
@@ -47,6 +47,7 @@ export async function PostOpenGraphImage(
       <h1
         style={{
           fontSize: "64px",
+          margin: 0,
         }}
       >
         {essay.data.title}
@@ -61,6 +62,8 @@ export async function PostOpenGraphImage(
           lineHeight: "1.5em",
           minHeight: 0,
           height: "100%",
+          margin: 0,
+          maxWidth: width - 160,
         }}
       >
         {bodyText}

@@ -2,11 +2,13 @@
 import BaseHead from '../components/BaseHead.astro';
 import BlogHeader from '../components/BlogHeader.astro';
 import BlogFooter from '../components/BlogFooter.astro';
-import TimeStamp from '../components/TimeStamp.astro';
 import { getCollection } from 'astro:content';
 
 const essays = await getCollection('essays')
 	.then((essays) => essays.sort((a, b) => new Date(b.data.publishedDate).getTime() - new Date(a.data.publishedDate).getTime()));
+
+const formatYearMonth = (date: Date) => `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}`;
+const yearMonths = essays.map((essay) => formatYearMonth(essay.data.publishedDate));
 ---
 
 <!doctype html>
@@ -19,11 +21,13 @@ const essays = await getCollection('essays')
 			<main>
 				<BlogHeader />
 				<ul>
-					{essays.map((essay) => (
+					{essays.map((essay, index) => (
 						<li>
 							<a href={`/${essay.id}`}>
+								<time datetime={essay.data.publishedDate.toISOString()}>
+									{yearMonths[index] !== yearMonths[index - 1] && yearMonths[index]}
+								</time>
 								<span>{essay.data.title}</span>
-								<TimeStamp date={essay.data.publishedDate}/>
 							</a>
 						</li>
 					))}
@@ -35,22 +39,27 @@ const essays = await getCollection('essays')
 </html>
 <style is:global>
 	ul {
-		margin-block-start: 24px;
+		margin-block-start: 12px;
 		padding-inline-start: 0;
 		list-style: none;
 	}
 
 	li a {
-		display: inline-block;
-		height: 44px;
+		display: grid;
+		grid-template-columns: 64px 1fr;
+		column-gap: 12px;
+		align-items: baseline;
 		padding-block: 12px;
+	}
+
+	li time {
+		color: var(--color-tertiary);
+		font-size: 13px;
+		font-variant-numeric: tabular-nums;
 	}
 
 	li span {
 		color: var(--color-primary);
 		font-size: 16px;
-		margin-inline-end: 4px;
-		vertical-align: middle;
 	}
-
 </style>
