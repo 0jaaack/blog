@@ -2,7 +2,6 @@ import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import preact from "@astrojs/preact";
-import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,13 +15,8 @@ export default defineConfig({
       },
     },
   },
-  adapter: cloudflare({
-    imageService: "compile",
-    prerenderEnvironment: "node",
-  }),
-  session: false,
   image: {
-    domains: ["cdn.jaaack.dev", "cdn.gcp.hopsoffice.com"],
+    domains: ["cdn.jaaack.dev"],
     responsiveStyles: true,
   },
 });
