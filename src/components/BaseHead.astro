@@ -1,7 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import type { CollectionEntry } from 'astro:content';
-import Analytics from '@vercel/analytics/astro';
 import GlobalStyles from '../styles/GlobalStyles.astro';
 
 interface Props {
@@ -127,8 +126,13 @@ const postImageUrl = essay != null ? `${Astro.url}${essay.id}-og.png` : "";
   document.addEventListener("astro:after-swap", init);
 </script>
 
-<!-- Vercel Analytics -->
-<Analytics />
+<!-- Cloudflare Web Analytics -->
+<script
+  is:inline
+  defer
+  src="https://static.cloudflareinsights.com/beacon.min.js"
+  data-cf-beacon='{"token": "b0500dfc4153420ea73d795edf1d5925"}'
+></script>
 
 <!-- Global Styles -->
 <GlobalStyles />
